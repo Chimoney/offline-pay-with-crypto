@@ -1,7 +1,7 @@
-'use strict';
+'use strict'
 
-module.exports = offlinePayWithCryptoBackend;
+module.exports = offlinePayWithCryptoBackend
 
 function offlinePayWithCryptoBackend() {
-    // TODO
+  // TODO
 }

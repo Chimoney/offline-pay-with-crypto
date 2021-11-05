@@ -4,7 +4,7 @@
   "description": "Enable payment with crypto starting with Celo",
   "main": "src/index.js",
   "scripts": {
-    "lint": "eslint src/**.js",
+    "lint": "eslint packages/**/**.js",
     "test": "jest",
     "prepublishOnly": "npm run lint && npm run test"
   },
@@ -45,5 +45,6 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Chimoney/offline-pay-with-crypto.git"
-  }
+  },
+  "eslintIgnore": ["*.spec.ts", "**/__tests__/**"]
 }
