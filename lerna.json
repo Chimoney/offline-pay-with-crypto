@@ -1,0 +1,14 @@
+{
+    "version": "1.0.0",
+    "lerna": "2.2.0",
+    "npmClient": "npm",
+    "useWorkspaces": true,
+    "packages": [
+      "src/packages/*"
+    ],
+    "commands" : {
+      "publish": {
+        "conventionalCommits": true
+      }
+    }
+  }
