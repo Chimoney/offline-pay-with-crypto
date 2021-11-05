@@ -1,7 +1,5 @@
-const name = require('../src')
-
-describe('name', () => {
-  it('should be `Happy Coding!`', () => {
-    expect(name).toBe('Happy Coding!')
+describe('test test', () => {
+  it('needs tests`', () => {
+    expect(1).toBe(1)
   })
 })

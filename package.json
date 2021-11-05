@@ -1,5 +1,5 @@
 {
-  "name": "offline-pay-with-crypto",
+  "name": "@chimoney/offline-pay-with-crypto",
   "version": "0.0.0",
   "description": "Enable payment with crypto starting with Celo",
   "main": "src/index.js",
@@ -32,6 +32,7 @@
     "eslint-plugin-prettier": "^3.4.0",
     "eslint-plugin-promise": "^4.2.1",
     "jest": "^27.0.5",
+    "lerna": "^4.0.0",
     "lint-staged": "^11.0.0",
     "prettier": "^2.3.1",
     "yorkie": "^2.0.0"
