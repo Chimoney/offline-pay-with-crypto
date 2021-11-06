@@ -14,9 +14,6 @@
     ],
     "collectCoverage": true
   },
-  "gitHooks": {
-    "pre-commit": "lint-staged && npm run test && git add ."
-  },
   "lint-staged": {
     "*.js": [
       "eslint --fix"
