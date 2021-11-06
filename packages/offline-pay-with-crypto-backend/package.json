@@ -3,7 +3,6 @@
   "version": "0.0.0",
   "description": "backend for offline-pay-with-crypto",
   "author": "Uchi Uchibeke <uchi.uchibeke@gmail.com>",
-  "homepage": "https://github.com/Chimoney/offline-pay-with-crypto/tree/main/packages/offline-pay-with-crypto-backend#readme",
   "license": "MIT",
   "main": "lib/offline-pay-with-crypto-backend.js",
   "directories": {

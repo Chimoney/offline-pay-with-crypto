@@ -3,7 +3,6 @@
   "version": "0.0.0",
   "description": "frontend for offline-pay-with-crypto",
   "author": "Uchi Uchibeke <uchi.uchibeke@gmail.com>",
-  "homepage": "https://github.com/Chimoney/offline-pay-with-crypto/tree/main/packages/offline-pay-with-crypto-widget#readme",
   "license": "MIT",
   "main": "lib/offline-pay-with-crypto-widget.js",
   "directories": {
@@ -21,9 +20,45 @@
     "url": "git+https://github.com/Chimoney/offline-pay-with-crypto.git"
   },
   "scripts": {
-    "test": "echo \"Error: run tests from root\" && exit 1"
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
   },
   "bugs": {
     "url": "https://github.com/Chimoney/offline-pay-with-crypto/issues"
+  },
+  "dependencies": {
+    "@testing-library/jest-dom": "^5.15.0",
+    "@testing-library/react": "^11.2.7",
+    "@testing-library/user-event": "^12.8.3",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-qr-code": "^2.0.2",
+    "react-scripts": "4.0.3",
+    "react-select": "^5.2.0",
+    "web-vitals": "^1.1.2"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@babel/preset-react": "^7.16.0",
+    "ts-jest": "^27.0.7"
   }
 }
