@@ -14,16 +14,16 @@ function Modal() {
     },
     {
       value: "Ethereum",
-      label:   <span className="label"><img src="https://res.cloudinary.com/doouwbecx/image/upload/v1635964474/Cryptocurrency_r8kedk.png" alt="" /> Ethereum</span>,
+      label: <span className="label"><img src="https://res.cloudinary.com/doouwbecx/image/upload/v1635964474/Cryptocurrency_r8kedk.png" alt="" /> Ethereum</span>,
 
     },
     {
       value: "Dodge",
-      label:  <span className="label"><img src="https://res.cloudinary.com/doouwbecx/image/upload/v1635965533/Cryptocurrency2_fniyvz.png" alt="" /> Dodge</span>,
+      label: <span className="label"><img src="https://res.cloudinary.com/doouwbecx/image/upload/v1635965533/Cryptocurrency2_fniyvz.png" alt="" /> Dodge</span>,
     },
     {
       value: "Stellar",
-      label:  <span className="label"><img src="https://res.cloudinary.com/doouwbecx/image/upload/v1635965533/Cryptocurrency4_dfew2o.png" alt="" /> Stellar</span>,
+      label: <span className="label"><img src="https://res.cloudinary.com/doouwbecx/image/upload/v1635965533/Cryptocurrency4_dfew2o.png" alt="" /> Stellar</span>,
     },
   ];
 
@@ -79,39 +79,39 @@ function Modal() {
         </div>
       </div>
       {
-          state === "address" ?
+        state === "address" ?
           (
             <div className="qr-container">
-            <div className="qr-div">
-              <QRCode value="Hello"size="100" className="qr-code" />
-            </div>
-            <div className="qr-text">
-              <h1>Scan QR Code</h1>
-              <p>
-                Scan code to see request details from your mobile wallet for payment
-                to receiving address below.
-              </p>
-              <div className="qr-url">
+              <div className="qr-div">
+                <QRCode value="Hello" size={100} className="qr-code" />
+              </div>
+              <div className="qr-text">
+                <h1>Scan QR Code</h1>
+                <p>
+                  Scan code to see request details from your mobile wallet for payment
+                  to receiving address below.
+                </p>
+                <div className="qr-url">
                   <span className="address">To address:</span>
                   <span className="code"> xcvb876567nbvccvbnm </span>
-                  <img src="https://img.icons8.com/material-outlined/14/2138A8/copy.png" alt=""/>
+                  <img src="https://img.icons8.com/material-outlined/14/2138A8/copy.png" alt="" />
+                </div>
               </div>
             </div>
-          </div>
           )
-          : 
+          :
           (
-              <div className="agent-section">
-                  <h1>Enter your e-mail  to receive payment details to give your agent</h1>
-                  <div className="agent-section-div">
-                      <label>Email</label>
-                      <br/>
-                      <input type="text" placeholder="example@gmail.com" />
-                  </div>
-                  <div className="agent-btn">
-                      <button>Send</button>
-                  </div>
+            <div className="agent-section">
+              <h1>Enter your e-mail  to receive payment details to give your agent</h1>
+              <div className="agent-section-div">
+                <label>Email</label>
+                <br />
+                <input type="text" placeholder="example@gmail.com" />
               </div>
+              <div className="agent-btn">
+                <button>Send</button>
+              </div>
+            </div>
           )
       }
     </div>
