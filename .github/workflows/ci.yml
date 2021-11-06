@@ -43,29 +43,3 @@ jobs:
       - name: Test
         run: yarn test
 
-  lint:
-    runs-on: ubuntu-latest
-    name: 'Lint: node@14, ubuntu-latest'
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-
-      - name: Set node version to 14
-        uses: actions/setup-node@v2
-        with:
-          node-version: 14
-
-      - name: Set dependencies cache
-        uses: actions/cache@v2
-        with:
-          path: ~/.cache/yarn
-          key: lint-dependencies-${{ hashFiles('yarn.lock') }}
-          restore-keys: |
-            lint-dependencies-${{ hashFiles('yarn.lock') }}
-            lint-dependencies-
-      - name: Prepare
-        run: |
-          yarn install --frozen-lockfile
-      - name: Lint
-        run: yarn lint
