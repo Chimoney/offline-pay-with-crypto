@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Grid from '@mui/material/Grid';
 import "./modal.css";
 import QRCode from "react-qr-code";
 import Select from "react-select";
@@ -29,40 +30,47 @@ function Modal() {
 
 
   return (
-    <div className="modal-container">
-      <div className="modal-header-component">
-        <div className="modal-side-header">
-          <img
-            className="modal-logo"
-            src="https://res.cloudinary.com/doouwbecx/image/upload/v1635508572/image_28_mryzcs.png"
-            alt=""
-          />
-          <div>
-            <h3>Chimoney Store</h3>
-            <p>Order Details: Airtime </p>
-          </div>
-        </div>
+<div style={{width: '100%'}}>
+<Grid container spacing={2} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
+        <Grid item xs={12} lg={3} sm={1} md={3}>
 
-        <div className="modal-left-header">
-          <h3>TOTAL</h3>
-          <p>USD 3500.00</p>
-        </div>
-      </div>
+        </Grid>
 
-      <div className="select-component">
-        <h2>Select crypto to pay with</h2>
-        <Select options={options} className="select-box" />
-        <br />
 
-        <p>To Pay</p>
-        <div className="span-div">
-          <span className="span-income">0.00019 cUSD</span>
-          <span> = </span>
-          <span className="span-response">USD 3500.00</span>
-        </div>
-      </div>
-      <br />
-      <div className="section-component">
+        <Grid zeroMinWidth item xs={12} lg={6} sm={10} md={6}>
+        <div className="modal-header-component">
+         <div className="modal-side-header">
+           <img
+             className="modal-logo"
+             src="https://res.cloudinary.com/doouwbecx/image/upload/v1635508572/image_28_mryzcs.png"
+             alt=""
+           />
+           <div>
+             <h3>Chimoney Store</h3>
+             <p>Order Details: Airtime </p>
+           </div>
+         </div>
+
+         <div className="modal-left-header">
+           <h3>TOTAL</h3>
+           <p>USD 3500.00</p>
+         </div>
+       </div>
+       <div className="select-component">
+         <h2>Select crypto to pay with</h2>
+         <Select options={options} className="select-box" />
+         <br />
+
+         <p>To Pay</p>
+         <div className="span-div">
+           <span className="span-income">0.00019 cUSD</span>
+           <span> = </span>
+           <span className="span-response">USD 3500.00</span>
+         </div>
+       </div>
+       <br/>
+       <br/>
+       <div className="section-component">
         <div>
           <span
             className={state === "address" ? "active" : "inactive"}
@@ -79,42 +87,47 @@ function Modal() {
         </div>
       </div>
       {
-        state === "address" ?
-          (
-            <div className="qr-container">
-              <div className="qr-div">
-                <QRCode value="Hello" size={100} className="qr-code" />
-              </div>
-              <div className="qr-text">
-                <h1>Scan QR Code</h1>
-                <p>
-                  Scan code to see request details from your mobile wallet for payment
-                  to receiving address below.
-                </p>
-                <div className="qr-url">
-                  <span className="address">To address:</span>
-                  <span className="code"> xcvb876567nbvccvbnm </span>
-                  <img src="https://img.icons8.com/material-outlined/14/2138A8/copy.png" alt="" />
-                </div>
-              </div>
-            </div>
-          )
-          :
-          (
-            <div className="agent-section">
-              <h1>Enter your e-mail  to receive payment details to give your agent</h1>
-              <div className="agent-section-div">
-                <label>Email</label>
-                <br />
-                <input type="text" placeholder="example@gmail.com" />
-              </div>
-              <div className="agent-btn">
-                <button>Send</button>
-              </div>
-            </div>
-          )
-      }
-    </div>
+         state === "address" ?
+           (
+             <div className="qr-container">
+               <div className="qr-div">
+                 <QRCode value="Hello" size={100} className="qr-code" />
+               </div>
+               <div className="qr-text">
+                 <h1>Scan QR Code</h1>
+                 <p>
+                   Scan code to see request details from your mobile wallet for payment
+                   to receiving address below.
+                 </p>
+                 <div className="qr-url">
+                   <span className="address">To address:</span>
+                   <span className="code"> xcvb876567nbvccvbnm </span>
+                   <img src="https:img.icons8.com/material-outlined/14/2138A8/copy.png" alt="" />
+                 </div>
+               </div>
+             </div>
+           )
+           :
+           (
+             <div className="agent-section">
+               <h1>Enter your e-mail  to receive payment details to give your agent</h1>
+               <div className="agent-section-div">
+                 <label>Email</label>
+                 <br />
+                 <input type="text" placeholder="example@gmail.com" />
+               </div>
+               <div className="agent-btn">
+                 <button>Send</button>
+               </div>
+             </div>
+           )
+       }
+        </Grid>
+        <Grid item xs={12} lg={3} sm={1} md={3}>
+ 
+        </Grid>
+      </Grid>
+</div>
   );
 }
 
