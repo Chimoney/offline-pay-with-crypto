@@ -1,12 +1,24 @@
-import React, { useState } from "react";
-import Grid from '@mui/material/Grid';
-import "./modal.css";
-import QRCode from "react-qr-code";
-import Select from "react-select";
+import * as React from 'react';
+import { useState } from 'react';
+import Select from "react-select"
+import CardHeader from '@mui/material/CardHeader';
+import Avatar from '@mui/material/Avatar';
+import Typography from '@mui/material/Typography';
+import { red } from '@mui/material/colors';
+import Container from '@mui/material/Container';
+import Box from '@mui/material/Box';
+import "./modal.css"
+import Paper from '@mui/material/Paper';
+import QRCode from "react-qr-code"
 
-function Modal() {
+
+
+
+
+export default function Modal() {
+  const [expanded, setExpanded] = React.useState(false);
+    
   const [state, setState] = useState("address");
-
 
   const options = [
     {
@@ -29,48 +41,46 @@ function Modal() {
   ];
 
 
+
+
   return (
-<div style={{width: '100%'}}>
-<Grid container spacing={2} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
-        <Grid item xs={12} lg={3} sm={1} md={3}>
+    <Container maxWidth="md" >
+      <Box sx={{ bgcolor: 'transparent', height: '96vh', marginTop: '3%'}}>
+      <CardHeader
+        avatar={
+          <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
+            CS
+          </Avatar>
+        }
+        action={
+         <>
+  <Typography variant="body2" color="text.secondary">TOTAL</Typography>
+  <Typography variant="body2" color="text.primary">USD 3500.00</Typography>
+         
+         </>
+        }
+        title="Chimoney Store"
+        subheader="Order Details: Airtime "
+      />
+<br/>
+<br/>
+<br/>
+<Typography variant="h6" align="center"  color="text.primary">Select crypto to pay with</Typography>
+<br/>
+<Paper align="center" elevation={0} sx={{background: 'transparent'}} >
+<Select options={options} className="select-box" />
+</Paper>
+<br/>
+<br/>
+<Typography variant="body2" align="center"  color="text.primary">To Pay</Typography>
+<br/>
+<Paper align="center" elevation={0} sx={{background: 'transparent'}} >
+<Typography display="inline" variant="h5" align="center"  color="text.primary">0.00019 cUSD =</Typography>
+<Typography display="inline" variant="h6" align="center"  color="text.primary"> USD 3500.00</Typography>
 
-        </Grid>
-
-
-        <Grid zeroMinWidth item xs={12} lg={6} sm={10} md={6}>
-        <div className="modal-header-component">
-         <div className="modal-side-header">
-           <img
-             className="modal-logo"
-             src="https://res.cloudinary.com/doouwbecx/image/upload/v1635508572/image_28_mryzcs.png"
-             alt=""
-           />
-           <div>
-             <h3>Chimoney Store</h3>
-             <p>Order Details: Airtime </p>
-           </div>
-         </div>
-
-         <div className="modal-left-header">
-           <h3>TOTAL</h3>
-           <p>USD 3500.00</p>
-         </div>
-       </div>
-       <div className="select-component">
-         <h2>Select crypto to pay with</h2>
-         <Select options={options} className="select-box" />
-         <br />
-
-         <p>To Pay</p>
-         <div className="span-div">
-           <span className="span-income">0.00019 cUSD</span>
-           <span> = </span>
-           <span className="span-response">USD 3500.00</span>
-         </div>
-       </div>
-       <br/>
-       <br/>
-       <div className="section-component">
+</Paper>
+<br/>
+        <div className="section-component">
         <div>
           <span
             className={state === "address" ? "active" : "inactive"}
@@ -86,6 +96,7 @@ function Modal() {
           </span>
         </div>
       </div>
+
       {
          state === "address" ?
            (
@@ -122,13 +133,12 @@ function Modal() {
              </div>
            )
        }
-        </Grid>
-        <Grid item xs={12} lg={3} sm={1} md={3}>
- 
-        </Grid>
-      </Grid>
-</div>
+       <br/>
+       <br/>
+       <br/>
+       <hr className="hr"/>
+       <Typography variant="h6" align="center"  color="text.primary">Secured by cryptography</Typography>
+      </Box>
+    </Container>
   );
 }
-
-export default Modal;
