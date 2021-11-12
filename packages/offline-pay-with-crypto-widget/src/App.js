@@ -1,13 +1,13 @@
 import React from 'react';
 import './App.css';
-import Modal from './screens/Modal';
-
+import { ModalProvider } from './components';
+import Demo from './Demo';
 
 function App() {
   return (
-    <div>
-      <Modal />
-    </div>
+    <ModalProvider>
+      <Demo />
+    </ModalProvider>
   );
 }
 
