@@ -1,13 +1,14 @@
 import React from 'react';
 import './App.css';
-import { ModalProvider } from './components';
-import Demo from './Demo';
+import { Modal } from './components';
+
 
 function App() {
+  const config ={}
   return (
-    <ModalProvider>
-      <Demo />
-    </ModalProvider>
+    <>
+      <Modal config={config} />
+    </>
   );
 }
 

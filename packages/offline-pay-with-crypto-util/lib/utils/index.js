@@ -22,7 +22,7 @@ const utils = () => {
 
     const iframe = document.createElement('IFRAME')
     iframe.setAttribute('id', 'pay-with-crypto--frame-id')
-    iframe.setAttribute('src', `https://chimoney.netlify.app/`)
+    iframe.setAttribute('src', `https://offline-pay-with-crypto.netlify.app`)
     iframe.setAttribute('style', iframeStyle)
     iframe.setAttribute('allowfullscreen', 'true')
     iframe.setAttribute('frameborder', 0)
