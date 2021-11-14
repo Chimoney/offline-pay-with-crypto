@@ -13,7 +13,7 @@ module.exports = offlinePayWithCryptoUtil
 function offlinePayWithCryptoUtil({
   onOpen = () => {},
   onClose = () => {},
-  onComplete = () => {},
+  onComplete,
   ...rest
 }) {
   if (typeof arguments[0] !== 'object') {
@@ -43,6 +43,10 @@ offlinePayWithCryptoUtil.prototype.launch = function () {
 offlinePayWithCryptoUtil.prototype.closeModal = function () {
   offlinePayWithCryptoUtil.prototype.utils.closeModal()
   this.onClose()
+}
+
+offlinePayWithCryptoUtil.prototype.done = function (data) {
+  this.onComplete({ ...data})
 }
 
 if (global.window !== undefined) {

@@ -1,16 +1,17 @@
 {
   "name": "@chimoney/offline-pay-with-crypto-widget",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "frontend for offline-pay-with-crypto",
   "author": "Uchi Uchibeke <uchi.uchibeke@gmail.com>",
   "license": "MIT",
-  "main": "lib/offline-pay-with-crypto-widget.js",
+  "main": "lib/index.js",
   "directories": {
     "lib": "lib",
     "test": "__tests__"
   },
   "files": [
-    "lib"
+    "lib",
+    "README.md"
   ],
   "publishConfig": {
     "registry": "https://registry.yarnpkg.com"
@@ -23,7 +24,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "clean": "rimraf lib",
+    "compile": "npm run clean && cross-env NODE_ENV=production babel src/components --out-dir lib --copy-files --ignore __tests__,spec.js,test.js,stories.js,__snapshots__"
   },
   "bugs": {
     "url": "https://github.com/Chimoney/offline-pay-with-crypto/issues"
@@ -36,12 +39,12 @@
     "@testing-library/jest-dom": "^5.15.0",
     "@testing-library/react": "^11.2.7",
     "@testing-library/user-event": "^12.8.3",
+    "framer-motion": "^4.1.17",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-qr-code": "^2.0.2",
     "react-scripts": "4.0.3",
-    "react-select": "^5.2.0",
-    "web-vitals": "^1.1.2"
+    "react-select": "^5.2.0"
   },
   "eslintConfig": {
     "extends": [
@@ -61,8 +64,16 @@
       "last 1 safari version"
     ]
   },
+  "peerDependencies": {
+    "react": ">=16.8.6",
+    "react-dom": ">=16.8.6"
+  },
   "devDependencies": {
+    "@babel/cli": "^7.16.0",
+    "@babel/core": "^7.16.0",
+    "@babel/preset-env": "^7.16.0",
     "@babel/preset-react": "^7.16.0",
+    "cross-env": "^7.0.3",
     "ts-jest": "^27.0.7"
   }
 }

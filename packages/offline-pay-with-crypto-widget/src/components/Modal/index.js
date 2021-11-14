@@ -10,15 +10,38 @@ import Box from '@mui/material/Box';
 import "./modal.css"
 import Paper from '@mui/material/Paper';
 import QRCode from "react-qr-code"
+import { motion }  from "framer-motion";
+
+const dropIn = {
+  hidden: {
+    y: "250vh",
+    opacity: 0,
+  },
+  visible: {
+    y: "0",
+    opacity: 1,
+    transition: {
+      duration: 0.3,
+      type: "spring",
+      damping: 25,
+      stiffness: 160,
+    },
+  },
+  exit: {
+    y: "100vh",
+    opacity: 0,
+  },
+};
 
 
 
+export function Modal({ config }) {
+  // const [expanded, setExpanded] = React.useState(false);
 
-
-export default function Modal() {
-  const [expanded, setExpanded] = React.useState(false);
-    
   const [state, setState] = useState("address");
+
+  // eslint-disable-next-line no-unused-vars
+  const { name, order_type, amount, currency, address, store_img } = config;
 
   const options = [
     {
@@ -44,7 +67,13 @@ export default function Modal() {
 
 
   return (
-    <Container maxWidth="md" >
+    <motion.div
+    onClick={(e) => e.stopPropagation()}
+    variants={dropIn}
+    initial="hidden"
+    animate="visible"
+    exit="exit">
+    <Container sx={{ bgcolor: "white"}} maxWidth="md" >
       <Box sx={{ bgcolor: 'transparent', height: '96vh', marginTop: '3%'}}>
       <CardHeader
         avatar={
@@ -56,11 +85,11 @@ export default function Modal() {
          <>
   <Typography variant="body2" color="text.secondary">TOTAL</Typography>
   <Typography variant="body2" color="text.primary">USD 3500.00</Typography>
-         
+
          </>
         }
-        title="Chimoney Store"
-        subheader="Order Details: Airtime "
+        title={`${ (name && name) || "Chimoney Store"}`}
+        subheader={`Order Details: ${order_type}`}
       />
 <br/>
 <br/>
@@ -140,5 +169,6 @@ export default function Modal() {
        <Typography variant="h6" align="center"  color="text.primary">Secured by cryptography</Typography>
       </Box>
     </Container>
+    </motion.div>
   );
 }

@@ -1,13 +1,14 @@
 import React from 'react';
 import './App.css';
-import Modal from './screens/Modal';
+import { Modal } from './components';
 
 
 function App() {
+  const config ={}
   return (
-    <div>
-      <Modal />
-    </div>
+    <>
+      <Modal config={config} />
+    </>
   );
 }
 

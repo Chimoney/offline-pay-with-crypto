@@ -5,29 +5,3 @@
   align-items: center;
   /* height: 100vh; */
 }
-
-
-.secured {
-  display: flex;
-  justify-content: center;
-  margin-top: 0%;
-}
-
-.secured p {
-  font-weight: bold;
-  font-family: 'Raleway';
-  color: #263238;
-}
-
-.hr {
-  display: none;
-}
-
-@media screen and (min-width: 320px) and (max-width: 1024px) {
-.hr {
-  display: flex;
-  background-color: rgba(38, 50, 56, 0.5);
-  width: 80%;
-}
-
-}
