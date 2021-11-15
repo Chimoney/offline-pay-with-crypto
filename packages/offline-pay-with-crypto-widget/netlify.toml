@@ -1,0 +1,8 @@
+[build]
+  command = "yarn run build"
+  publish="build"
+  base = "./packages/offline-pay-with-crypto-widget"
+  [[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
