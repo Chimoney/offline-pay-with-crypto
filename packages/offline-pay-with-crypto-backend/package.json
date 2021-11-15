@@ -1,28 +1,18 @@
 {
-  "name": "@chimoney/offline-pay-with-crypto-backend",
+  "name": "offline-pay-with-crypto-backend",
   "version": "0.0.0",
-  "description": "backend for offline-pay-with-crypto",
-  "author": "Uchi Uchibeke <uchi.uchibeke@gmail.com>",
-  "license": "MIT",
-  "main": "lib/offline-pay-with-crypto-backend.js",
-  "directories": {
-    "lib": "lib",
-    "test": "__tests__"
-  },
-  "files": [
-    "lib"
-  ],
-  "publishConfig": {
-    "registry": "https://registry.yarnpkg.com"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Chimoney/offline-pay-with-crypto.git"
-  },
+  "private": true,
   "scripts": {
-    "test": "echo \"Error: run tests from root\" && exit 1"
+    "start": "node ./bin/www"
   },
-  "bugs": {
-    "url": "https://github.com/Chimoney/offline-pay-with-crypto/issues"
+  "dependencies": {
+    "@celo/contractkit": "^1.3.3",
+    "cookie-parser": "~1.4.4",
+    "debug": "~2.6.9",
+    "express": "~4.16.1",
+    "http-errors": "~1.6.3",
+    "jade": "~1.11.0",
+    "morgan": "~1.9.1",
+    "web3": "^1.6.0"
   }
 }
