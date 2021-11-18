@@ -39,6 +39,7 @@ export function Modal({ config }) {
   // const [expanded, setExpanded] = React.useState(false);
 
   const [state, setState] = useState("address");
+  const [email, setEmail] = useState("");
 
   // eslint-disable-next-line no-unused-vars
   const { name, order_type, amount, currency, address, store_img } = config;
@@ -73,7 +74,7 @@ export function Modal({ config }) {
     initial="hidden"
     animate="visible"
     exit="exit">
-    <Container sx={{ bgcolor: "white"}} maxWidth="md" >
+    <Container id="modal-container" sx={{ bgcolor: "white"}} maxWidth="md" >
       <Box sx={{ bgcolor: 'transparent', height: '96vh', marginTop: '3%'}}>
       <CardHeader
         avatar={
@@ -142,7 +143,7 @@ export function Modal({ config }) {
                  <div className="qr-url">
                    <span className="address">To address:</span>
                    <span className="code"> xcvb876567nbvccvbnm </span>
-                   <img src="https:img.icons8.com/material-outlined/14/2138A8/copy.png" alt="" />
+                   <img id="qr-code" src="https:img.icons8.com/material-outlined/14/2138A8/copy.png" alt="" />
                  </div>
                </div>
              </div>
@@ -154,7 +155,7 @@ export function Modal({ config }) {
                <div className="agent-section-div">
                  <label>Email</label>
                  <br />
-                 <input type="text" placeholder="example@gmail.com" />
+                 <input type="text" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="example@gmail.com" />
                </div>
                <div className="agent-btn">
                  <button>Send</button>
