@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Select from "react-select"
 import CardHeader from '@mui/material/CardHeader';
 import Avatar from '@mui/material/Avatar';
@@ -11,6 +11,15 @@ import "./modal.css"
 import Paper from '@mui/material/Paper';
 import QRCode from "react-qr-code"
 import { motion }  from "framer-motion";
+import Web3 from "web3";
+import { newKitFromWeb3 } from "@celo/contractkit";
+import Icon from "react-crypto-icons";
+
+
+const web3 = new Web3("https://alfajores-forno.celo-testnet.org")
+const kit = newKitFromWeb3(web3);
+
+
 
 const dropIn = {
   hidden: {
@@ -36,30 +45,79 @@ const dropIn = {
 
 
 export function Modal({ config }) {
+
+    // eslint-disable-next-line no-unused-vars
+    const { name, order_type, amount, currency, address, store_img } = config;
+
+
   // const [expanded, setExpanded] = React.useState(false);
 
   const [state, setState] = useState("address");
 
-  // eslint-disable-next-line no-unused-vars
-  const { name, order_type, amount, currency, address, store_img } = config;
+  const [selectedCoin, setSelectedCoin] = useState(null)
+
+const paymentInfo = async () => {
+        let goldtoken = await kit.contracts.getGoldToken()
+        const oneGold = kit.web3.utils.toWei('1', 'ether')
+
+    let anAddress = '0x998f2193ae2d887249c27d2ab2ceb9e60be75f7b'
+    let myAddress = '0xD86518b29BB52a5DAC5991eACf09481CE4B0710d'
+
+    let celoBalance = await goldtoken.balanceOf(myAddress )
+    let amount = 1000;
+
+   // let celotx = await goldtoken.transfer(anAddress, amount).send({from: myAddress})
+    
+   // let celoReceipt = await celotx.waitReceipt()
+
+    // const tx = kit.sendTransaction({
+    //   from: myAddress,
+    //   to: anAddress,
+    //   value: oneGold,
+    // })
+    // const hash = (await tx).getHash
+    // const receipt = (await tx).waitReceipt
+
+    const data = {
+      from: myAddress,
+      to: anAddress,
+      amount,
+      balance: celoBalance.toString(),
+      //celoReceipt
+    }
+
+    console.log({data})
+
+      }
+
+  useEffect(() => {
+    if(selectedCoin === "Celo") {
+       paymentInfo()
+    }
+   
+  }, [selectedCoin])
+
+  console.log({selectedCoin})
+
+
 
   const options = [
     {
-      value: "Celo Dollar (cUSD)",
-      label: <span className="label"><img src="https://res.cloudinary.com/doouwbecx/image/upload/v1635965533/7236_1_vsttxa.png" alt="" /> Celo Dollar (cUSD)</span>
+      value: "Celo",
+      label: <span className="label"> <Icon name="celo" size={25} /> Celo Dollar (cUSD)</span>
     },
     {
       value: "Ethereum",
-      label: <span className="label"><img src="https://res.cloudinary.com/doouwbecx/image/upload/v1635964474/Cryptocurrency_r8kedk.png" alt="" /> Ethereum</span>,
+      label: <span className="label"><Icon name="eth" size={25} /> Ethereum</span>,
 
     },
     {
       value: "Dodge",
-      label: <span className="label"><img src="https://res.cloudinary.com/doouwbecx/image/upload/v1635965533/Cryptocurrency2_fniyvz.png" alt="" /> Dodge</span>,
+      label: <span className="label"><Icon name="doge" size={25} /> Dodge</span>,
     },
     {
       value: "Stellar",
-      label: <span className="label"><img src="https://res.cloudinary.com/doouwbecx/image/upload/v1635965533/Cryptocurrency4_dfew2o.png" alt="" /> Stellar</span>,
+      label: <span className="label"><Icon name="xlm" size={25} /> Stellar</span>,
     },
   ];
 
@@ -97,7 +155,7 @@ export function Modal({ config }) {
 <Typography variant="h6" align="center"  color="text.primary">Select crypto to pay with</Typography>
 <br/>
 <Paper align="center" elevation={0} sx={{background: 'transparent'}} >
-<Select options={options} className="select-box" />
+<Select options={options} className="select-box" onChange={(e) => setSelectedCoin(e.value)} />
 </Paper>
 <br/>
 <br/>
