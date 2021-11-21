@@ -1,6 +1,6 @@
-import React from 'react';
-import clsx from 'clsx';
-import styles from './HomepageFeatures.module.css';
+import React from 'react'
+import clsx from 'clsx'
+import styles from './HomepageFeatures.module.css'
 
 const FeatureList = [
   {
@@ -8,8 +8,8 @@ const FeatureList = [
     Svg: require('../../static/img/undraw_docusaurus_mountain.svg').default,
     description: (
       <>
-        Offline Pay with crypto was designed from the ground up to be easily installed and
-        used experience amazing crypto payment integration.
+        Offline Pay with crypto was designed from the ground up to be easily
+        installed and used experience amazing crypto payment integration.
       </>
     ),
   },
@@ -18,22 +18,21 @@ const FeatureList = [
     Svg: require('../../static/img/undraw_docusaurus_tree.svg').default,
     description: (
       <>
-        Offline Pay with crypto remove the burden of Payment Integration, as we do the work for you.
+        Offline Pay with crypto remove the burden of Payment Integration, as we
+        the npm package or library does the work for you.
       </>
     ),
   },
   {
-    title: 'Powered by Chimoney',
+    title: 'Accept CELO',
     Svg: require('../../static/img/undraw_docusaurus_react.svg').default,
     description: (
-      <>
-        Send and receive Gift Cards, Crypto, Airtime and Bank transfers to million people globally
-      </>
+      <>Accept Celo on any website or mobile app by adding your address</>
     ),
   },
-];
+]
 
-function Feature({Svg, title, description}) {
+function Feature({ Svg, title, description }) {
   return (
     <div className={clsx('col col--4')}>
       <div className="text--center">
@@ -44,7 +43,7 @@ function Feature({Svg, title, description}) {
         <p>{description}</p>
       </div>
     </div>
-  );
+  )
 }
 
 export default function HomepageFeatures() {
@@ -58,5 +57,5 @@ export default function HomepageFeatures() {
         </div>
       </div>
     </section>
-  );
+  )
 }
