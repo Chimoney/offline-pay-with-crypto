@@ -242,17 +242,16 @@ export function Modal({
               <h1>
                 Enter your e-mail to receive payment details to give your agent
               </h1>
-              <div className="agent-section-div">
-                <TextField
-                  value={email}
-                  fullWidth
-                  label="Email"
-                  variant="outlined"
-                  type="email"
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="example@gmail.com"
-                />
-              </div>
+              <TextField
+                id="agent-email"
+                value={email}
+                fullWidth
+                label="Email"
+                variant="outlined"
+                type="email"
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="example@gmail.com"
+              />
               <div className="agent-btn">
                 <button>Send</button>
               </div>
