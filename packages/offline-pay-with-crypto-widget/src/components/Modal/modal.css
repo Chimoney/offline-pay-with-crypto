@@ -151,32 +151,6 @@ select:focus {
   color: #000000;
 }
 
-.agent-section-div {
-  width: 50%;
-  margin-top: 3%;
-}
-
-.agent-section-div label {
-  font-family: 'Raleway';
-  font-style: normal;
-  font-weight: 500;
-  font-size: 12px;
-  display: flex;
-  align-items: center;
-  color: #000000;
-}
-
-.agent-section-div input {
-  padding: 10px;
-  width: 100%;
-  border: none;
-  border-radius: 10px;
-  background: #ffffff;
-  box-shadow: 0px 0px 2px #949dee;
-  border-radius: 5px;
-  outline: none;
-}
-
 .agent-btn {
   margin-top: 3%;
 }
@@ -272,9 +246,6 @@ select:focus {
   .agent-section h1 {
     width: 80%;
   }
-  .agent-section-div {
-    width: 80%;
-  }
   .agent-btn {
     /* margin-top: 5%; */
   }
@@ -311,9 +282,6 @@ select:focus {
     font-size: 10px;
   }
   .agent-section h1 {
-    width: 80%;
-  }
-  .agent-section-div {
     width: 80%;
   }
 }
