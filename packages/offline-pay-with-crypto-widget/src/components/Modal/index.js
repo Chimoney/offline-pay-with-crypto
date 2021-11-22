@@ -40,12 +40,12 @@ const ModalComponent = ({
   name = '',
   paymentDescription = '',
   store_img = '',
-  supportedCurrencies = [{ code: 'CELO', walletAddress: 'm', amount: 0 }],
+  supportedCurrencies,
 }) => {
   const [state, setState] = useState('address')
   const [email, setEmail] = useState('')
   const [notValid, setNotValid] = useState(false)
-  const [selectedCrypto, setSelectedCrypto] = useState(supportedCurrencies[0])
+  const [selectedCrypto, setSelectedCrypto] = useState(supportedCurrencies?.['CELO'])
   const { getConnectedKit, performActions, address } = useContractKit()
 
   const invalid = () => {
@@ -58,8 +58,10 @@ const ModalComponent = ({
       return true
     }
 
-    for (const { walletAddress, amount, code } of supportedCurrencies) {
-      if (!walletAddress || !amount || !code) {
+    for (const name in supportedCurrencies) {
+       const { walletAddress, amount, code} = supportedCurrencies[name];
+
+      if (! walletAddress || !amount || !code) {
         return true
       }
     }
@@ -68,6 +70,10 @@ const ModalComponent = ({
   useEffect(() => {
     setNotValid(invalid())
   }, [setNotValid])
+
+  useEffect(() => {
+    setSelectedCrypto(supportedCurrencies?.['CELO'])
+  }, [])
 
   if (notValid) {
     return (
@@ -81,7 +87,7 @@ const ModalComponent = ({
             amount,
             currency,
             store_img,
-            supportedCurrencies: [{ code: 'CELO', walletAddress: 'address', amount: 100 }]
+            supportedCurrencies: { 'CELO' :{ code: 'CELO', walletAddress: 'address', amount: 100 }}
           }
           `}
         </pre>
@@ -122,7 +128,7 @@ const ModalComponent = ({
     }
   }
   const isCelo =
-    selectedCrypto.walletAddress &&
+    selectedCrypto?.walletAddress &&
     (selectedCrypto.code?.toUpperCase() === 'CELO' ||
       selectedCrypto.code?.toUpperCase() === 'CUSD')
 
@@ -152,7 +158,7 @@ const ModalComponent = ({
                   TOTAL
                 </Typography>
                 <Typography variant="body2" color="text.primary">
-                  {`${selectedCrypto.amount} ${selectedCrypto.code}`}
+                  {`${selectedCrypto?.amount} ${selectedCrypto?.code}`}
                 </Typography>
               </>
             }
@@ -175,7 +181,7 @@ const ModalComponent = ({
           >
             <TextField
               id="code"
-              value={selectedCrypto}
+              value={selectedCrypto && selectedCrypto}
               onChange={(e) => {
                 setSelectedCrypto(e.target.value)
               }}
@@ -184,7 +190,8 @@ const ModalComponent = ({
               select
               variant="outlined"
             >
-              {supportedCurrencies.map((currency) => {
+              {Object.keys(supportedCurrencies).map((currency) => {
+                currency = supportedCurrencies[currency];
                 const upperCode = currency.code.toUpperCase()
                 const crypto = cryptoIcon[upperCode]
                 return (
@@ -215,7 +222,7 @@ const ModalComponent = ({
               align="center"
               color="text.primary"
             >
-              {selectedCrypto.amount} {selectedCrypto.code} =
+              {selectedCrypto?.amount} {selectedCrypto?.code} =
             </Typography>
             <Typography
               display="inline"
@@ -224,7 +231,7 @@ const ModalComponent = ({
               color="text.primary"
             >
               {' '}
-              {selectedCrypto.amount} {selectedCrypto.code}
+              {selectedCrypto?.amount} {selectedCrypto?.code}
             </Typography>
           </Paper>
           <br />
@@ -264,7 +271,7 @@ const ModalComponent = ({
                   <span className="address">To address: </span>
                   <div className="qr-url">
                     <span className="code">
-                      {selectedCrypto.walletAddress}{' '}
+                      {selectedCrypto?.walletAddress}{' '}
                     </span>
                     <img
                       id="qr-code"
@@ -273,7 +280,7 @@ const ModalComponent = ({
                     />
                   </div>
                   <Typography variant="caption">
-                    Only send {selectedCrypto.code} to the address
+                    Only send {selectedCrypto?.code} to the address
                   </Typography>
                 </div>
               </div>

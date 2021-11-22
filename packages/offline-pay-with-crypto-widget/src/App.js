@@ -3,24 +3,19 @@ import './App.css'
 import { Modal } from './components'
 
 function App() {
-  const config = {
-    name: 'Chimoney app',
-    store_img:
-      'https://lh3.googleusercontent.com/-crMj-_7sKco/AAAAAAAAAAI/AAAAAAAAAAA/8wRiFKrmpe8/s88-p-k-no-ns-nd/photo.jpg',
 
-    paymentDescription: 'Send a payment to chimoney.io',
-    supportedCurrencies: [
-      {
-        code: 'CELO',
-        walletAddress: '0x363f932743599EBc88C85A35C201615dA4f2Bc5E',
-        amount: 1,
-      },
-      {
-        code: 'cUSD',
-        walletAddress: '0x363f932743599EBc88C85A35C201615dA4f2Bc5E',
-        amount: 1,
-      },
-    ],
+  const url = new URL(window.location.href);
+  const name = url.searchParams.get('name');
+  const store_img = url.searchParams.get('storeImg');
+  const paymentDescription = url.searchParams.get('paymentDescription');
+  const supportedCurrenciesFromParams = url.searchParams.get('supportedCurrencies');
+  const supportedCurrencies = JSON.parse(decodeURIComponent(supportedCurrenciesFromParams));
+
+  const config = {
+    name,
+    store_img,
+    paymentDescription,
+    supportedCurrencies: supportedCurrencies || { 'CELO': { code: 'CELO', walletAddress: 'm', amount: 0 }}
   }
   return <Modal {...config} />
 }
