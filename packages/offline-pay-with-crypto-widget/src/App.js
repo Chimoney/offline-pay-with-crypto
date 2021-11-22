@@ -10,8 +10,16 @@ function App() {
 
     paymentDescription: 'Send a payment to chimoney.io',
     supportedCurrencies: [
-      { code: 'CELO', walletAddress: 'kdkdldldldldlldldldldlld', amount: 10 },
-      { code: 'cUSD', walletAddress: 'pppp.slskofifiifi', amount: 100 },
+      {
+        code: 'CELO',
+        walletAddress: '0x363f932743599EBc88C85A35C201615dA4f2Bc5E',
+        amount: 1,
+      },
+      {
+        code: 'cUSD',
+        walletAddress: '0x363f932743599EBc88C85A35C201615dA4f2Bc5E',
+        amount: 1,
+      },
     ],
   }
   return <Modal {...config} />
