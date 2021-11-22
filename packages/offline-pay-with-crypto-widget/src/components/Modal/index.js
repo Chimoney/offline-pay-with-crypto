@@ -135,6 +135,9 @@ const ModalComponent = ({
       exit="exit"
     >
       <Container id="modal-container" sx={{ bgcolor: 'white' }} maxWidth="md">
+        <Typography color="red" align="center" variant="body2">
+          This is actively being developed. Do not send real transaction
+        </Typography>
         <Box sx={{ bgcolor: 'transparent', height: '96vh', marginTop: '3%' }}>
           <CardHeader
             avatar={
