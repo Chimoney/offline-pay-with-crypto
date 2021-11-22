@@ -29,14 +29,24 @@ export default function DemoModal() {
     const { isOpen, toggleModal } = useModal();
 
     const config = {
-        name: "Chimoney Store",
-        order_type: "Airtime",
-        amount: 3500,
-        currency: "usd", // defaults to usd
-        address: "",
-        store_img: ""
-    };
+    name: 'Chimoney app',
+    store_img:
+      'https://lh3.googleusercontent.com/-crMj-_7sKco/AAAAAAAAAAI/AAAAAAAAAAA/8wRiFKrmpe8/s88-p-k-no-ns-nd/photo.jpg',
 
+    paymentDescription: 'Send a payment to chimoney.io',
+    supportedCurrencies: {
+      'CELO': {
+        code: 'CELO',
+        walletAddress: '0x3........', // change to celo wallet address here
+        amount: 1,
+      },
+      'CUSD': {
+        code: 'cUSD',
+        walletAddress: '0x3........',
+        amount: 1,
+      },
+    },
+  }
     return (
         <>
             <button onClick={toggleModal}>Open Modal</button>

@@ -1,6 +1,6 @@
 {
   "name": "@chimoney/offline-pay-with-crypto-util",
-  "version": "0.1.0",
+  "version": "0.1.5",
   "description": "An utility script for offline-pay-with-crypto-widget",
   "author": "Uchi Uchibeke <uchi.uchibeke@gmail.com>",
   "license": "MIT",
@@ -29,8 +29,8 @@
     "url": "https://github.com/Chimoney/offline-pay-with-crypto/issues"
   },
   "devDependencies": {
-      "terser-webpack-plugin": "^4.2.2",
-      "webpack": "^4.44.2",
-      "webpack-cli": "^3.3.12"
+    "terser-webpack-plugin": "^4.2.2",
+    "webpack": "^4.44.2",
+    "webpack-cli": "^3.3.12"
   }
 }
