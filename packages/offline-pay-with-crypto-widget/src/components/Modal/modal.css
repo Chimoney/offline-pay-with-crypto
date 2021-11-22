@@ -129,7 +129,7 @@ select:focus {
   font-family: 'Raleway';
   font-style: normal;
   font-weight: 600;
-  font-size: 14px;
+  font-size: 10px;
   line-height: 16px;
   color: #2138a8;
   margin-right: 2%;
@@ -155,12 +155,10 @@ select:focus {
   margin-top: 3%;
 }
 .agent-btn button {
-  width: 200px;
+  min-width: 200px;
   padding: 10px;
-  border: none;
   background: #2138a8;
-  border-radius: 4px;
-  color: white;
+  text-transform: capitalize;
 }
 
 .qr-code {
