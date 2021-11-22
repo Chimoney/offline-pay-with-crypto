@@ -35,12 +35,21 @@ Manually add the `@chimoney/offline-pay-with-crypto-util` script tag to the <hea
       console.log("transaction completed")
     },
       // configuration information
-    name: "Chimoney Store",
-    order_type: "Airtime",
-    amount: 3500,
-    currency: "usd", // defaults to usd
-    address: "",
-    store_img: ""
+    name: "Test app",
+    store_img: "https://lh3.googleusercontent.com/-crMj-_7sKco/AAAAAAAAAAI/AAAAAAAAAAA/8wRiFKrmpe8/s88-p-k-no-ns-nd/photo.jpg",
+    paymentDescription: "Send a payment to my test app",
+    supportedCurrencies: {
+            CELO: {
+              code: "CELO",
+              walletAddress: "0x33....", // enter wallet addresss here
+              amount: 1,
+            },
+            CUSD: {
+              code: "cUSD",
+              walletAddress: "0x45..",
+              amount: 1,
+            },
+          },
     }).setup()
 
     // triggers modal launch

@@ -13,7 +13,16 @@ const utils = () => {
       return
     }
 
-    const { onOpen } = config
+    const { onOpen, name, store_img, paymentDescription, supportedCurrencies } = config;
+
+    const encodedSupportedCurrencies = encodeURIComponent(JSON.stringify(supportedCurrencies));
+
+    // var source = new URL('https://offline-pay-with-crypto.onrender.com/');
+    var source = new URL('https://offline-pay-with-crypto.netlify.app');
+    source.searchParams.set('name', name);
+    source.searchParams.set('storeImg', store_img);
+    source.searchParams.set('paymentDescription', paymentDescription);
+    source.searchParams.set('supportedCurrencies', encodedSupportedCurrencies );
 
     const container = document.createElement('div')
     container.setAttribute('id', 'pay-with-crypto--widget-div')
@@ -22,14 +31,14 @@ const utils = () => {
 
     const iframe = document.createElement('IFRAME')
     iframe.setAttribute('id', 'pay-with-crypto--frame-id')
-    iframe.setAttribute('src', `https://offline-pay-with-crypto.netlify.app`)
+    iframe.src = `${source.href}`;
     iframe.setAttribute('style', iframeStyle)
     iframe.setAttribute('allowfullscreen', 'true')
     iframe.setAttribute('frameborder', 0)
     iframe.setAttribute('title', 'Pay Offline With Crypto by Chimoney')
     iframe.setAttribute(
       'sandbox',
-      'allow-forms allow-scripts allow-same-origin allow-top-navigation-by-user-activation'
+      'allow-forms allow-scripts allow-all-cookies allow-same-origin allow-top-navigation-by-user-activation allow-popups allow-storage-access-by-user-activation'
     )
 
     iframe.onload = function () {

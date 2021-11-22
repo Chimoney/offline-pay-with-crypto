@@ -33,7 +33,7 @@ function offlinePayWithCryptoUtil({
 
 offlinePayWithCryptoUtil.prototype.setup = function () {
   offlinePayWithCryptoUtil.prototype.utils.addStyle()
-  offlinePayWithCryptoUtil.prototype.utils.init({ onOpen: this.onOpen })
+  offlinePayWithCryptoUtil.prototype.utils.init({ onOpen: this.onOpen, ...this.config })
 }
 
 offlinePayWithCryptoUtil.prototype.launch = function () {
