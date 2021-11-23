@@ -14,6 +14,7 @@ import cryptoIcon from 'base64-cryptocurrency-icons'
 import { ContractKitProvider } from '@celo-tools/use-contractkit'
 import '@celo-tools/use-contractkit/lib/styles.css'
 import { useContractKit } from '@celo-tools/use-contractkit'
+import ModalConfig from '../ModalConfig'
 
 const dropIn = {
   hidden: {
@@ -53,7 +54,7 @@ const ModalComponent = ({
       !name ||
       !paymentDescription ||
       !supportedCurrencies ||
-      supportedCurrencies.length < 1
+      Object.entries(supportedCurrencies).length < 1
     ) {
       return true
     }
@@ -77,23 +78,7 @@ const ModalComponent = ({
 
   if (notValid) {
     return (
-      <div style={{ margin: '100px' }}>
-        ERROR: Please pass the following options
-        <pre>
-          {`
-          {
-            name,
-            paymentDescription,
-            amount,
-            currency,
-            store_img,
-            supportedCurrencies: { 'CELO' :{ code: 'CELO', walletAddress: 'address', amount: 100 }}
-          }
-          `}
-        </pre>
-        each item in supportedCurrencies should include code, walletAddress and
-        amount
-      </div>
+      <ModalConfig />
     )
   }
   async function transfer() {

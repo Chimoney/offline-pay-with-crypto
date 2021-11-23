@@ -17,8 +17,7 @@ const utils = () => {
 
     const encodedSupportedCurrencies = encodeURIComponent(JSON.stringify(supportedCurrencies));
 
-    // var source = new URL('https://offline-pay-with-crypto.onrender.com/');
-    var source = new URL('https://offline-pay-with-crypto.netlify.app');
+    var source = new URL('https://offline-pay-with-crypto.onrender.com');
     source.searchParams.set('name', name);
     source.searchParams.set('storeImg', store_img);
     source.searchParams.set('paymentDescription', paymentDescription);
