@@ -1,15 +1,23 @@
-import React from 'react';
-import './App.css';
-import { Modal } from './components';
-
+import React from 'react'
+import './App.css'
+import { Modal } from './components'
 
 function App() {
-  const config ={}
-  return (
-    <>
-      <Modal config={config} />
-    </>
-  );
+
+  const url = new URL(window.location.href);
+  const name = url.searchParams.get('name');
+  const store_img = url.searchParams.get('storeImg');
+  const paymentDescription = url.searchParams.get('paymentDescription');
+  const supportedCurrenciesFromParams = url.searchParams.get('supportedCurrencies');
+  const supportedCurrencies = JSON.parse(decodeURIComponent(supportedCurrenciesFromParams));
+
+  const config = {
+    name,
+    store_img,
+    paymentDescription,
+    supportedCurrencies: supportedCurrencies || { 'CELO': { code: 'CELO', walletAddress: 'm', amount: 0 }}
+  }
+  return <Modal {...config} />
 }
 
-export default App;
+export default App
