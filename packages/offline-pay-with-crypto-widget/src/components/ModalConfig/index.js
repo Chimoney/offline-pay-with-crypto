@@ -82,8 +82,7 @@ function ModalConfig() {
 
     const addSupportedCurrency = () => {
         if (!supportedCurrencies?.[selectedCoin.toUpperCase()]) {
-            console.log({supportedCurrencies})
-            console.log({selectedCoin})
+
             setSupportedCurrencies({
                 ...supportedCurrencies,
                 [selectedCoin.toUpperCase()]: {
