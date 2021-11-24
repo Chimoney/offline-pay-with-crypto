@@ -1,6 +1,6 @@
 {
   "name": "@chimoney/offline-pay-with-crypto-util",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "An utility script for offline-pay-with-crypto-widget",
   "author": "Uchi Uchibeke <uchi.uchibeke@gmail.com>",
   "license": "MIT",

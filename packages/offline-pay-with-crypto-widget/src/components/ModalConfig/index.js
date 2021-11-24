@@ -26,7 +26,7 @@ const currencies = [
         code: 'CELO'
     },
     {
-        code: 'cUSD'
+        code: 'CUSD'
     }
     //TODO: add other supported currencies
 ];
@@ -82,9 +82,11 @@ function ModalConfig() {
 
     const addSupportedCurrency = () => {
         if (!supportedCurrencies?.[selectedCoin.toUpperCase()]) {
+            console.log({supportedCurrencies})
+            console.log({selectedCoin})
             setSupportedCurrencies({
                 ...supportedCurrencies,
-                [selectedCoin]: {
+                [selectedCoin.toUpperCase()]: {
                     amount: 0,
                     walletAddress: '',
                     code: selectedCoin
