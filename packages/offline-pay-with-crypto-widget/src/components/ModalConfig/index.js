@@ -22,14 +22,14 @@ const Alert = React.forwardRef(function Alert(props, ref) {
 })
 
 const currencies = [
-  {
-    code: 'CELO',
-  },
-  {
-    code: 'cUSD',
-  },
-  //TODO: add other supported currencies
-]
+    {
+        code: 'CELO'
+    },
+    {
+        code: 'CUSD'
+    }
+    //TODO: add other supported currencies
+];
 
 function ModalConfig() {
   const [paymentLink, setPaymentLink] = useState('')
@@ -50,11 +50,11 @@ function ModalConfig() {
     setOpen(true)
   }
 
+
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {
       return
     }
-
     setOpen(false)
   }
 
@@ -69,29 +69,31 @@ function ModalConfig() {
     setSupportedCurrencies(supportedCurrenciesFromParams)
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
-
-  const handleSupportedCurrChange = (name, option) => (e) => {
-    setSupportedCurrencies({
-      ...supportedCurrencies,
-      [name]: {
-        ...supportedCurrencies[name],
-        [option]: e.target.value,
-      },
-    })
-  }
-
-  const addSupportedCurrency = () => {
-    if (!supportedCurrencies?.[selectedCoin.toUpperCase()]) {
-      setSupportedCurrencies({
-        ...supportedCurrencies,
-        [selectedCoin]: {
-          amount: 0,
-          walletAddress: '',
-          code: selectedCoin,
-        },
-      })
+  
+  
+    const handleSupportedCurrChange = (name, option) => (e) => {
+        setSupportedCurrencies({
+            ...supportedCurrencies,
+            [name]: {
+                ...supportedCurrencies[name],
+                [option]: e.target.value
+            }
+        })
     }
-  }
+
+    const addSupportedCurrency = () => {
+        if (!supportedCurrencies?.[selectedCoin.toUpperCase()]) {
+
+            setSupportedCurrencies({
+                ...supportedCurrencies,
+                [selectedCoin.toUpperCase()]: {
+                    amount: 0,
+                    walletAddress: '',
+                    code: selectedCoin
+                }
+            })
+        }
+    }
 
   const generatePaymentLink = () => {
     const encodedSupportedCurrencies = encodeURIComponent(
