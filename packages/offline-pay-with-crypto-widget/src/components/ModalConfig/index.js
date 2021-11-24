@@ -69,8 +69,8 @@ function ModalConfig() {
     setSupportedCurrencies(supportedCurrenciesFromParams)
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
-  
-  
+
+
     const handleSupportedCurrChange = (name, option) => (e) => {
         setSupportedCurrencies({
             ...supportedCurrencies,
@@ -100,7 +100,7 @@ function ModalConfig() {
       JSON.stringify(supportedCurrencies)
     )
 
-    var source = new URL('https://offline-pay-with-crypto.onrender.com')
+    var source = new URL(`${window.location.origin}`)
     source.searchParams.set('name', name)
     source.searchParams.set('storeImg', storeImg)
     source.searchParams.set('paymentDescription', paymentDescription)
@@ -285,6 +285,7 @@ function ModalConfig() {
                   <TextField
                     margin="normal"
                     value={paymentLink}
+                    label="Copy Payment Link "
                     fullWidth
                     InputProps={{
                       endAdornment: (
