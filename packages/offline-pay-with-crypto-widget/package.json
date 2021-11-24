@@ -28,7 +28,8 @@
     "test:prod": "cypress open --config-file ./cypress.prod.json",
     "eject": "react-scripts eject",
     "clean": "rimraf lib",
-    "compile": "npm run clean && cross-env NODE_ENV=production babel src/components --out-dir lib --copy-files --ignore __tests__,spec.js,test.js,stories.js,__snapshots__"
+    "compile": "npm run clean && cross-env NODE_ENV=production babel src/components --out-dir lib --copy-files --ignore __tests__,spec.js,test.js,stories.js,__snapshots__",
+    "analyze": "source-map-explorer 'build/static/js/*.js'"
   },
   "bugs": {
     "url": "https://github.com/Chimoney/offline-pay-with-crypto/issues"
@@ -49,7 +50,8 @@
     "react-dom": "^17.0.2",
     "react-qr-code": "^2.0.2",
     "react-scripts": "4.0.3",
-    "react-select": "^5.2.0"
+    "react-select": "^5.2.0",
+    "source-map-explorer": "^2.5.2"
   },
   "eslintConfig": {
     "extends": [
