@@ -14,6 +14,8 @@ import { CopyToClipboard } from 'react-copy-to-clipboard'
 import Typography from '@mui/material/Typography'
 import Snackbar from '@mui/material/Snackbar'
 import MuiAlert from '@mui/material/Alert'
+import CopyAllIcon from '@mui/icons-material/CopyAll';
+import InputAdornment from '@mui/material/InputAdornment';
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />
@@ -65,6 +67,7 @@ function ModalConfig() {
     )
 
     setSupportedCurrencies(supportedCurrenciesFromParams)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const handleSupportedCurrChange = (name, option) => (e) => {
@@ -277,30 +280,21 @@ function ModalConfig() {
                   }
                   placement="top"
                 >
-                  <Box
-                    component="button"
-                    fontFamily="inherit"
-                    fontSize="16px"
-                    fontWeight="400"
-                    lineHeight="1.25"
-                    display="flex"
-                    flexWrap="wrap"
-                    width="100%"
-                    margin=".5rem 0"
-                    padding="24px"
-                    maxHeight="300px"
-                    textAlign="left"
-                    border="0"
-                    borderRadius="4px"
-                    type="button"
-                    variant="contained"
-                  >
-                    <Typography>
-                      <code>
-                        {paymentLink}
-                      </code>
-                    </Typography>
-                  </Box>
+                  <TextField
+                    margin="normal"
+                    value={paymentLink}
+                    fullWidth
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <CopyAllIcon />
+                        </InputAdornment>
+                      ),
+                    }}
+                    rows={6}
+                    disabled
+                    variant="outlined"
+                  />
                 </Tooltip>
               </CopyToClipboard>
             </Grid>
