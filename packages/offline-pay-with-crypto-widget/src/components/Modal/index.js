@@ -129,7 +129,7 @@ const ModalComponent = ({
         <Typography color="red" align="center" variant="body2">
           This is actively being developed. Do not send real transaction
         </Typography>
-        <Box sx={{ bgcolor: 'transparent', height: '96vh', marginTop: '3%' }}>
+        <Box sx={{ bgcolor: 'transparent', minHeight: '96vh', marginTop: '3%', marginBottom: '2%' }}>
           <CardHeader
             avatar={
               <Avatar
