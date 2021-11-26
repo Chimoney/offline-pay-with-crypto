@@ -10,7 +10,7 @@ import './modal.css'
 import Paper from '@mui/material/Paper'
 import QRCode from 'react-qr-code'
 import { motion } from 'framer-motion'
-import cryptoIcon from 'base64-cryptocurrency-icons'
+import { icons as cryptoIcon } from '../../utils/base64Icons';
 import { ContractKitProvider } from '@celo-tools/use-contractkit'
 import '@celo-tools/use-contractkit/lib/styles.css'
 import { useContractKit } from '@celo-tools/use-contractkit'

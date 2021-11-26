@@ -5,7 +5,7 @@ import TextField from '@mui/material/TextField'
 import Box from '@mui/material/Box'
 import MenuItem from '@mui/material/MenuItem'
 import FormControl from '@mui/material/FormControl'
-import cryptoIcon from 'base64-cryptocurrency-icons'
+import { icons as cryptoIcon } from '../../utils/base64Icons';
 import Button from '@mui/material/Button'
 import Stack from '@mui/material/Stack'
 import Grid from '@mui/material/Grid'
