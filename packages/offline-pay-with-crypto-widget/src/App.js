@@ -9,13 +9,13 @@ function App() {
   const store_img = url.searchParams.get('storeImg');
   const paymentDescription = url.searchParams.get('paymentDescription');
   const supportedCurrenciesFromParams = url.searchParams.get('supportedCurrencies');
-  const supportedCurrencies = JSON.parse(decodeURIComponent(supportedCurrenciesFromParams));
+  const supportedCurrencies = JSON.parse(decodeURIComponent(supportedCurrenciesFromParams)) || {};
 
   const config = {
     name,
     store_img,
     paymentDescription,
-    supportedCurrencies: supportedCurrencies || { 'CELO': { code: 'CELO', walletAddress: 'm', amount: 0 }}
+    supportedCurrencies
   }
   return <Modal {...config} />
 }

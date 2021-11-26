@@ -10,7 +10,7 @@ import './modal.css'
 import Paper from '@mui/material/Paper'
 import QRCode from 'react-qr-code'
 import { motion } from 'framer-motion'
-import { icons as cryptoIcon } from '../../utils/base64Icons';
+import { icons as cryptoIcon } from '../icons';
 import { ContractKitProvider } from '@celo-tools/use-contractkit'
 import '@celo-tools/use-contractkit/lib/styles.css'
 import { useContractKit } from '@celo-tools/use-contractkit'
@@ -38,14 +38,16 @@ const dropIn = {
 }
 
 const ModalComponent = ({
-  name = '',
-  paymentDescription = '',
-  store_img = '',
+  name,
+  paymentDescription,
+  store_img,
   supportedCurrencies,
 }) => {
   const [state, setState] = useState('address')
   const [email, setEmail] = useState('')
   const [notValid, setNotValid] = useState(false)
+  supportedCurrencies = Object.keys(supportedCurrencies).length < 1 ?  { 'CELO': { code: 'CELO', walletAddress: 'm', amount: 0 }} : supportedCurrencies;
+
   const [selectedCrypto, setSelectedCrypto] = useState(supportedCurrencies?.['CELO'])
   const { getConnectedKit, performActions, address } = useContractKit()
 
@@ -53,14 +55,13 @@ const ModalComponent = ({
     if (
       !name ||
       !paymentDescription ||
-      !supportedCurrencies ||
-      Object.entries(supportedCurrencies).length < 1
+      Object.keys(supportedCurrencies).length < 1
     ) {
       return true
     }
 
     for (const name in supportedCurrencies) {
-       const { walletAddress, amount, code} = supportedCurrencies[name];
+       const { walletAddress, amount, code} = supportedCurrencies?.[name];
 
       if (! walletAddress || !amount || !code) {
         return true
@@ -82,7 +83,7 @@ const ModalComponent = ({
     )
   }
   async function transfer() {
-    const code = selectedCrypto.code?.toUpperCase()
+    const code = selectedCrypto?.code?.toUpperCase()
     try {
       const kit = await getConnectedKit()
 
@@ -95,7 +96,7 @@ const ModalComponent = ({
         const action = await performActions(async (kit) => {
           const cUSD = await kit.contracts.getStableToken()
           const result = await cUSD
-            .transfer(selectedCrypto.walletAddress, selectedCrypto.amount)
+            .transfer(selectedCrypto?.walletAddress, selectedCrypto?.amount)
             .sendAndWaitForReceipt()
           console.log({ result })
         })
@@ -103,7 +104,7 @@ const ModalComponent = ({
         const action = await performActions(async (kit) => {
           const celo = await kit.contracts.getGoldToken()
           const result = await celo
-            .transfer(selectedCrypto.walletAddress, selectedCrypto.amount)
+            .transfer(selectedCrypto?.walletAddress, selectedCrypto?.amount)
             .sendAndWaitForReceipt()
           console.log({ result })
         })
@@ -167,6 +168,7 @@ const ModalComponent = ({
             elevation={0}
             sx={{ background: 'transparent' }}
           >
+            {Object.keys(supportedCurrencies).length > 0 &&
             <TextField
               id="code"
               value={selectedCrypto && selectedCrypto}
@@ -192,6 +194,7 @@ const ModalComponent = ({
                 )
               })}
             </TextField>
+             }
           </Paper>
           <br />
           <br />
@@ -244,11 +247,12 @@ const ModalComponent = ({
             <Grid container>
               <div className="qr-container">
                 <div className="qr-div">
-                  <QRCode
-                    value={selectedCrypto.walletAddress}
+                 { selectedCrypto?.walletAddress && <QRCode
+                    value={selectedCrypto?.walletAddress || ''}
                     size={150}
                     className="qr-code"
                   />
+                 }
                 </div>
                 <div className="qr-text">
                   <h1>Scan QR Code</h1>
@@ -287,6 +291,9 @@ const ModalComponent = ({
               </Grid>
             </Grid>
           ) : (
+            <Grid container>
+              <Grid xs={12} align="center" item>
+
             <div className="agent-section">
               <h1>Enter email to send the payment details to</h1>
               <TextField
@@ -310,6 +317,8 @@ const ModalComponent = ({
                 </Button>
               </div>
             </div>
+            </Grid>
+            </Grid>
           )}
           <br />
           <br />

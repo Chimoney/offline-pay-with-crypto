@@ -5,7 +5,7 @@ import TextField from '@mui/material/TextField'
 import Box from '@mui/material/Box'
 import MenuItem from '@mui/material/MenuItem'
 import FormControl from '@mui/material/FormControl'
-import { icons as cryptoIcon } from '../../utils/base64Icons';
+import { icons as cryptoIcon } from '../icons';
 import Button from '@mui/material/Button'
 import Stack from '@mui/material/Stack'
 import Grid from '@mui/material/Grid'
@@ -112,7 +112,7 @@ function ModalConfig() {
 
   return (
     <>
-      <Box sx={{ my: 4 }}>
+      <Box sx={{bgcolor: 'white', my: 4 }}>
         <Container sx={{ boxShadow: 2, p: 3 }} maxWidth="md">
           <Typography variant="h5" gutterBottom>
             Generate Payment Link
@@ -147,11 +147,11 @@ function ModalConfig() {
           <Box sx={{ my: 2 }}>Supported Currencies</Box>
 
           {supportedCurrencies &&
-            Object.entries(supportedCurrencies).map((crypto) => {
+            Object.entries(supportedCurrencies).map((crypto, idx) => {
               const [, curr] = crypto
 
               return (
-                <>
+                <div key={idx}>
                   <Stack direction="row" mt={3} spacing={2}>
                     <FormControl sx={{ width: '100%' }}>
                       <TextField
@@ -211,7 +211,7 @@ function ModalConfig() {
                       })}
                     </TextField>
                   </FormControl>
-                </>
+                </div>
               )
             })}
           <Stack direction="row" mt={6} spacing={2}>
