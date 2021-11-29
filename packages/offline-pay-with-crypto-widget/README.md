@@ -54,7 +54,7 @@ export default function DemoModal() {
                 {
                     isOpen &&
                     <ModalOverlay onClick={toggleModal}>
-                        <Modal config={config} />
+                        <Modal {...config} />
                     </ModalOverlay>
                 }
             </ModalContainer>
@@ -63,6 +63,22 @@ export default function DemoModal() {
 }
 
 ```
+
+
+## Local Development
+Link `peer-dependencies` packages
+
+```
+<!-- link react from the landing page project -->
+
+npm link ../offline-pay-with-crypto-landing-page/node_modules/react
+
+<!-- link react-dom -->
+npm link ../offline-pay-with-crypto-landing-page/node_modules/react-dom
+
+
+```
+
 
 
 <!-- CONTRIBUTING -->

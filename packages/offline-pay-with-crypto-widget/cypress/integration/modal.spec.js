@@ -2,7 +2,7 @@
 
 describe('test for the modal component', () => {
   beforeEach(() => {
-    cy.visit('/')
+    cy.visit('/?paymentDescription=Send%20a%20payment%20to%20chimoney.io&name=Test%20app&storeImg=https://lh3.googleusercontent.com/-crMj-_7sKco/AAAAAAAAAAI/AAAAAAAAAAA/8wRiFKrmpe8/s88-p-k-no-ns-nd/photo.jpg&supportedCurrencies=%7B"CELO"%3A%7B"code"%3A"CELO"%2C"walletAddress"%3A"0x363f932743599EBc88C85A35C201615dA4f2Bc5E"%2C"amount"%3A1%7D%2C"cUSD"%3A%7B"code"%3A"cUSD"%2C"walletAddress"%3A"0x363f932743599EBc88C85A35C201615dA4f2Bc5E"%2C"amount"%3A1%7D%7D')
   })
 
   it('renders modal component correctly', () => {

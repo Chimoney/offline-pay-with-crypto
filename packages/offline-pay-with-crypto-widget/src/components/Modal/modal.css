@@ -53,7 +53,7 @@ select:focus {
   line-height: 19px;
   color: #2138a8;
   text-align: center;
-  width: 50%;
+  min-width: 50%;
   border: 1px solid #2138a8;
   box-sizing: border-box;
   border-radius: 5px;
@@ -171,6 +171,7 @@ select:focus {
     justify-content: center;
     align-items: center;
     padding: 3%;
+    width: 100%;
   }
 
   .modal-logo {
