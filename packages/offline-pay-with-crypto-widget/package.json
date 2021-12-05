@@ -44,11 +44,14 @@
     "@testing-library/jest-dom": "^5.15.0",
     "@testing-library/react": "^11.2.7",
     "@testing-library/user-event": "^12.8.3",
+    "axios": "^0.24.0",
+    "formik": "^2.2.9",
     "framer-motion": "^4.1.17",
     "react-copy-to-clipboard": "^5.0.4",
     "react-qr-code": "^2.0.2",
     "react-scripts": "4.0.3",
-    "react-select": "^5.2.0"
+    "react-select": "^5.2.0",
+    "yup": "^0.32.11"
   },
   "eslintConfig": {
     "extends": [
