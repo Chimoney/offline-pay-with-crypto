@@ -7,7 +7,7 @@ import Box from '@mui/material/Box'
 import MenuItem from '@mui/material/MenuItem'
 import FormControl from '@mui/material/FormControl'
 import { icons as cryptoIcon } from '../icons';
-import Button from '@mui/material/Button'
+import LoadingButton from '@mui/lab/LoadingButton';
 import Stack from '@mui/material/Stack'
 import Grid from '@mui/material/Grid'
 import Tooltip from '@mui/material/Tooltip'
@@ -18,6 +18,7 @@ import MuiAlert from '@mui/material/Alert'
 import CopyAllIcon from '@mui/icons-material/CopyAll';
 import InputAdornment from '@mui/material/InputAdornment';
 import { Formik, FieldArray, getIn } from 'formik';
+import { coinApi } from '../../services'
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />
@@ -37,6 +38,7 @@ function ModalConfig() {
   const [paymentLink, setPaymentLink] = useState('')
   const [isGenerated, setIsGenerated] = useState(false)
   const [copiedText, setCopiedText] = useState()
+  const [isRateLoading, setIsRateLoading] = useState(false)
 
   const [config, setConfig] = useState({
     name: '',
@@ -74,14 +76,32 @@ function ModalConfig() {
     )
 
     let arrayFromSupportedCurrencies = []
-    for (const [, value] of Object.entries(supportedCurrenciesFromParams)) {
-      arrayFromSupportedCurrencies.push(value)
+    if (supportedCurrenciesFromParams) {
+      for (const [, value] of Object.entries(supportedCurrenciesFromParams)) {
+        arrayFromSupportedCurrencies.push(value)
+      }
     }
 
     setConfig({ name, amountToCharge, storeImg, paymentDescription, supportedCurrencies: arrayFromSupportedCurrencies })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
+  const getExchanges = async (code) => {
+    try {
+      setIsRateLoading(true)
+      const res = await coinApi.getExchange(code);
+      console.log({res})
+      if(!res.error){
+        setIsRateLoading(false)
+        return res
+      }
+    } catch (error) {
+      console.error({error})
+      setIsRateLoading(false)
+    }
+  }
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const handleAmountInput = useCallback((e) => {
     const keyCode = e.keyCode;
     if (keyCode !== 8 && !e.code.includes("Digit") && keyCode !== 37 && keyCode !== 39) {
@@ -97,7 +117,6 @@ function ModalConfig() {
         validateOnChange={false}
         initialValues={{
           ...config,
-
         }}
         validationSchema={
           Yup.object().shape({
@@ -116,16 +135,24 @@ function ModalConfig() {
           values,
           { setErrors, setStatus, setSubmitting }
         ) => {
-          console.log({ values })
-          //   const encodedSupportedCurrencies = encodeURIComponent(
-          //     JSON.stringify(supportedCurrencies)
-          //   )
-          //   var source = new URL(`${window.location.origin}`)
-          //   source.searchParams.set('name', name)
-          //   source.searchParams.set('storeImg', storeImg)
-          //   source.searchParams.set('paymentDescription', paymentDescription)
-          //   source.searchParams.set('supportedCurrencies', encodedSupportedCurrencies)
-          //   setPaymentLink(source.href)
+          const { name, storeImg, paymentDescription, amountToCharge, supportedCurrencies} = values;
+
+          let objectFromSupoortedCurrencies = {};
+
+          supportedCurrencies.forEach((curr) => {
+              objectFromSupoortedCurrencies[`${curr.code}`] = curr;
+          })
+            const encodedSupportedCurrencies = encodeURIComponent(
+              JSON.stringify(objectFromSupoortedCurrencies)
+            )
+            var source = new URL(`${window.location.origin}`)
+            source.searchParams.set('name', name)
+            source.searchParams.set('storeImg', storeImg)
+            source.searchParams.set('amountToCharge', amountToCharge)
+            source.searchParams.set('paymentDescription', paymentDescription)
+            source.searchParams.set('supportedCurrencies', encodedSupportedCurrencies)
+            setIsGenerated(true)
+            setPaymentLink(source.href)
         }}
       >
         {({
@@ -135,7 +162,7 @@ function ModalConfig() {
           handleSubmit,
           isSubmitting,
           touched,
-          setFieldValue,
+          setTouched,
           values,
         }) => (
           <form onSubmit={handleSubmit}>
@@ -144,6 +171,7 @@ function ModalConfig() {
                 <Typography variant="h5" gutterBottom>
                   Generate Payment Link
                 </Typography>
+
                 <TextField
                   margin="normal"
                   value={values?.name}
@@ -307,6 +335,7 @@ function ModalConfig() {
                                       onChange={handleChange}
                                       label="Amount to charge"
                                       variant="outlined"
+                                      disabled
                                     />
                                   </FormControl>
                                 </Stack>
@@ -402,26 +431,29 @@ function ModalConfig() {
                             alignItems="center"
                             sx={{ width: '100%' }}
                           >
-                            <Button type="button" onClick={() => {
-                              if (supportedCurrencies.findIndex(cur => cur?.code?.toUpperCase() === selectedCoin?.toUpperCase()) === -1) {
-                                arrayHelpers.push({
-                                  amount: 0,
+                            <LoadingButton loading={isRateLoading} type="button" onClick={ async () => {
+                              if (supportedCurrencies.findIndex(cur => cur?.code?.toUpperCase() === selectedCoin?.toUpperCase()) === -1 && (values.amountToCharge !== 0)) {
+                                 const data = await getExchanges(selectedCoin)
+
+                                 arrayHelpers.push({
+                                  amount: !data?.[selectedCoin]?.error ?  (data?.[selectedCoin]?.rate * values?.amountToCharge).toFixed(4) : 0, // TODO: confirm rounded offs from Uchi
                                   walletAddress: '',
                                   code: selectedCoin
                                 })
+                              } else {
+                                setTouched({
+                                  amountToCharge: true,
+                                })
+
                               }
                             }} variant="contained">
                               ADD SUPPORTED CURRENCY
-                            </Button>
+                            </LoadingButton>
                           </Box>
                         </Stack>
                       </>
                     )
                   }} />
-
-
-
-
                 {isGenerated ? (
                   <Grid
                     item
@@ -475,9 +507,9 @@ function ModalConfig() {
                   alignItems="center"
                   sx={{ m: 2 }}
                 >
-                  <Button type="submit" variant="contained">
+                  <LoadingButton loading={isSubmitting}  type="submit" variant="contained">
                     Generate Payment Link{' '}
-                  </Button>
+                  </LoadingButton>
                 </Box>
               </Container>
             </Box>
