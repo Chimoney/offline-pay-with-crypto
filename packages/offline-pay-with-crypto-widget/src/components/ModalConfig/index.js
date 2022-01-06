@@ -278,6 +278,7 @@ function ModalConfig() {
                   name="supportedCurrencies"
                   render={arrayHelpers => {
                     const { supportedCurrencies } = values;
+                    // arrayHelpers.remove() add remove currency feataure
                     return (
                       <>
                         {supportedCurrencies.length > 0 &&
@@ -388,6 +389,18 @@ function ModalConfig() {
                                       })}
                                     </TextField>
                                   </FormControl>
+                                  <Box
+                                    display="flex"
+                                    justifyContent="end"
+                                    alignItems="center"
+                                    sx={{ width: '100%' }}
+                                  >
+                                    <LoadingButton type="button" onClick={() => {
+                                      arrayHelpers.remove(idx)
+                                    }} variant="contained">
+                                      REMOVE CURRENCY
+                                    </LoadingButton>
+                                  </Box>
                                 </Stack>
                               </div>
                             )
