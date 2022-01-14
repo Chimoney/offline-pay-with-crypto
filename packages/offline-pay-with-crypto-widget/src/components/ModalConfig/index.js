@@ -285,7 +285,7 @@ function ModalConfig() {
                           supportedCurrencies.map((curr, idx) => {
                             return (
                               <div key={idx}>
-                                <Stack direction="row" mt={3} spacing={2}>
+                                <Stack direction={{ xs: 'column', sm: 'row' }}  mt={3} spacing={2}>
                                   <FormControl sx={{ width: '100%' }}>
                                     <TextField
                                       margin="normal"
@@ -340,7 +340,7 @@ function ModalConfig() {
                                     />
                                   </FormControl>
                                 </Stack>
-                                <Stack direction="row" mt={3} spacing={2}>
+                                <Stack  direction={{ xs: 'column', sm: 'row' }} mt={3} spacing={2}>
 
                                   <FormControl sx={{ width: '100%' }}>
                                     <TextField
@@ -406,7 +406,7 @@ function ModalConfig() {
                             )
                           })}
 
-                        <Stack direction="row" mt={6} spacing={2}>
+                        <Stack  direction={{ xs: 'column', sm: 'row' }} mt={6} spacing={2}>
                           <Box sx={{ width: '100%' }}>
                             <TextField
                               id="selectedCoin"
@@ -449,7 +449,7 @@ function ModalConfig() {
                                  const data = await getExchanges(selectedCoin)
 
                                  arrayHelpers.push({
-                                  amount: !data?.[selectedCoin]?.error ?  (data?.[selectedCoin]?.rate * values?.amountToCharge).toFixed(4) : 0, // TODO: confirm rounded offs from Uchi
+                                  amount: !data?.[selectedCoin]?.error ?  (values?.amountToCharge / data?.[selectedCoin]?.rate).toFixed(3) : 0, // TODO: confirm rounded offs from Uchi
                                   walletAddress: '',
                                   code: selectedCoin
                                 })
