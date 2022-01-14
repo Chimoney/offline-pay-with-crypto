@@ -32,7 +32,7 @@ app.use('/celo/transaction/verify', celoTnxVerifyRouter)
 
 const celoAddress1 = '0x363f932743599EBc88C85A35C201615dA4f2Bc5E'
 const celoAddress2 = '0x6D2cFcdB9FD34E01c65527397B6DDE8b2E9EE711'
-celoSubscriptions(celoAddress2)
+celoSubscriptions(celoAddress1)
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

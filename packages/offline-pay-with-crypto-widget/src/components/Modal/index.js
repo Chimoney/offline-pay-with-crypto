@@ -10,8 +10,8 @@ import './modal.css'
 import Paper from '@mui/material/Paper'
 import QRCode from 'react-qr-code'
 import { motion } from 'framer-motion'
-import { icons as cryptoIcon } from '../icons';
-import { ContractKitProvider} from '@celo-tools/use-contractkit'
+import { icons as cryptoIcon } from '../icons'
+import { ContractKitProvider } from '@celo-tools/use-contractkit'
 import { useWalletConnectConnector } from '@celo-tools/use-contractkit/lib/connectors/useWalletConnectConnector'
 import '@celo-tools/use-contractkit/lib/styles.css'
 import { useContractKit } from '@celo-tools/use-contractkit'
@@ -47,9 +47,14 @@ const ModalComponent = ({
   const [state, setState] = useState('address')
   const [email, setEmail] = useState('')
   const [notValid, setNotValid] = useState(false)
-  supportedCurrencies = Object.keys(supportedCurrencies).length < 1 ?  { 'CELO': { code: 'CELO', walletAddress: 'm', amount: 0 }} : supportedCurrencies;
+  supportedCurrencies =
+    Object.keys(supportedCurrencies).length < 1
+      ? { CELO: { code: 'CELO', walletAddress: 'm', amount: 0 } }
+      : supportedCurrencies
 
-  const [selectedCrypto, setSelectedCrypto] = useState(supportedCurrencies?.['CELO'])
+  const [selectedCrypto, setSelectedCrypto] = useState(
+    supportedCurrencies?.['CELO']
+  )
   const { getConnectedKit, performActions, address } = useContractKit()
 
   const invalid = () => {
@@ -62,17 +67,17 @@ const ModalComponent = ({
     }
 
     for (const name in supportedCurrencies) {
-       const { walletAddress, amount, code} = supportedCurrencies?.[name];
+      const { walletAddress, amount, code } = supportedCurrencies?.[name]
 
-      if (! walletAddress || !amount || !code) {
+      if (!walletAddress || !amount || !code) {
         return true
       }
     }
   }
 
   const getDeepLink = (uri) => {
-    return `celo://wallet/wc?uri=${uri}`;
-  };
+    return `celo://wallet/wc?uri=${uri}`
+  }
 
   useEffect(() => {
     setNotValid(invalid())
@@ -89,12 +94,10 @@ const ModalComponent = ({
     true,
     getDeepLink,
     selectedCrypto?.walletAddress
-  );
+  )
 
   if (notValid) {
-    return (
-      <ModalConfig />
-    )
+    return <ModalConfig />
   }
   async function transfer() {
     const code = selectedCrypto?.code?.toUpperCase()
@@ -144,7 +147,14 @@ const ModalComponent = ({
         <Typography color="red" align="center" variant="body2">
           This is actively being developed. Do not send real transaction
         </Typography>
-        <Box sx={{ bgcolor: 'transparent', minHeight: '96vh', marginTop: '3%', marginBottom: '2%' }}>
+        <Box
+          sx={{
+            bgcolor: 'transparent',
+            minHeight: '96vh',
+            marginTop: '3%',
+            marginBottom: '2%',
+          }}
+        >
           <CardHeader
             avatar={
               <Avatar
@@ -182,33 +192,33 @@ const ModalComponent = ({
             elevation={0}
             sx={{ background: 'transparent' }}
           >
-            {Object.keys(supportedCurrencies).length > 0 &&
-            <TextField
-              id="code"
-              value={selectedCrypto && selectedCrypto}
-              onChange={(e) => {
-                setSelectedCrypto(e.target.value)
-              }}
-              fullWidth
-              label="Pay with"
-              select
-              variant="outlined"
-            >
-              {Object.keys(supportedCurrencies).map((currency) => {
-                currency = supportedCurrencies[currency];
-                const upperCode = currency.code.toUpperCase()
-                const crypto = cryptoIcon[upperCode]
-                return (
-                  <MenuItem key={currency.code} value={currency}>
-                    <span className="label">
-                      <img src={crypto?.icon} alt="" /> {currency.code} (
-                      {crypto?.name})
-                    </span>
-                  </MenuItem>
-                )
-              })}
-            </TextField>
-             }
+            {Object.keys(supportedCurrencies).length > 0 && (
+              <TextField
+                id="code"
+                value={selectedCrypto && selectedCrypto}
+                onChange={(e) => {
+                  setSelectedCrypto(e.target.value)
+                }}
+                fullWidth
+                label="Pay with"
+                select
+                variant="outlined"
+              >
+                {Object.keys(supportedCurrencies).map((currency) => {
+                  currency = supportedCurrencies[currency]
+                  const upperCode = currency.code.toUpperCase()
+                  const crypto = cryptoIcon[upperCode]
+                  return (
+                    <MenuItem key={currency.code} value={currency}>
+                      <span className="label">
+                        <img src={crypto?.icon} alt="" /> {currency.code} (
+                        {crypto?.name})
+                      </span>
+                    </MenuItem>
+                  )
+                })}
+              </TextField>
+            )}
           </Paper>
           <br />
           <br />
@@ -261,12 +271,13 @@ const ModalComponent = ({
             <Grid container>
               <div className="qr-container">
                 <div className="qr-div">
-                 { selectedCrypto?.walletAddress && <QRCode
-                    value={uri || ''}
-                    size={150}
-                    className="qr-code"
-                  />
-                 }
+                  {selectedCrypto?.walletAddress && (
+                    <QRCode
+                      value={selectedCrypto?.walletAddress || ''}
+                      size={150}
+                      className="qr-code"
+                    />
+                  )}
                 </div>
                 <div className="qr-text">
                   <h1>Scan QR Code</h1>
@@ -307,31 +318,32 @@ const ModalComponent = ({
           ) : (
             <Grid container>
               <Grid xs={12} align="center" item>
-
-            <div className="agent-section">
-              <h1>Enter email to send the payment details to</h1>
-              <TextField
-                id="agent-email"
-                value={email}
-                label="Email"
-                variant="outlined"
-                type="email"
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="example@gmail.com"
-                style={{ maxWidth: '400px' }}
-                fullWidth
-              />
-              <div className="agent-btn">
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={() => alert("We're working on the Agent feature")}
-                >
-                  Send
-                </Button>
-              </div>
-            </div>
-            </Grid>
+                <div className="agent-section">
+                  <h1>Enter email to send the payment details to</h1>
+                  <TextField
+                    id="agent-email"
+                    value={email}
+                    label="Email"
+                    variant="outlined"
+                    type="email"
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="example@gmail.com"
+                    style={{ maxWidth: '400px' }}
+                    fullWidth
+                  />
+                  <div className="agent-btn">
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={() =>
+                        alert("We're working on the Agent feature")
+                      }
+                    >
+                      Send
+                    </Button>
+                  </div>
+                </div>
+              </Grid>
             </Grid>
           )}
           <br />
