@@ -39,6 +39,8 @@ function ModalConfig() {
   const [isGenerated, setIsGenerated] = useState(false)
   const [copiedText, setCopiedText] = useState()
   const [isRateLoading, setIsRateLoading] = useState(false)
+  const [isNudged, setIsNudged] = useState(false)
+
 
   const [config, setConfig] = useState({
     name: '',
@@ -125,7 +127,7 @@ function ModalConfig() {
             amountToCharge: Yup.number('Amount to charge must be a number').required().positive().integer(),
             paymentDescription: Yup.string().required('Payment Description is required'),
             supportedCurrencies: Yup.array().of(Yup.object().shape({
-              walletAddress: Yup.string().required('Wallet Address is required').min(30, 'Wallet address must be atleast 30 characters'),
+              walletAddress: Yup.string().matches(/^(0x)?[0-9a-f]{40}$/i, 'Invalid Wallet Address').required('Wallet Address is required'),
               code: Yup.string().required('Currency code is required'),
               amount: Yup.number().required('Amount to charge is required'),
             })
@@ -135,25 +137,31 @@ function ModalConfig() {
           values,
           { setErrors, setStatus, setSubmitting }
         ) => {
-          const { name, storeImg, paymentDescription, amountToCharge, supportedCurrencies} = values;
 
-          let objectFromSupoortedCurrencies = {};
+          if(isNudged){
 
-          supportedCurrencies.forEach((curr) => {
+            const { name, storeImg, paymentDescription, amountToCharge, supportedCurrencies} = values;
+
+            let objectFromSupoortedCurrencies = {};
+
+            supportedCurrencies.forEach((curr) => {
               objectFromSupoortedCurrencies[`${curr.code}`] = curr;
-          })
+            })
             const encodedSupportedCurrencies = encodeURIComponent(
               JSON.stringify(objectFromSupoortedCurrencies)
-            )
-            var source = new URL(`${window.location.origin}`)
-            source.searchParams.set('name', name)
-            source.searchParams.set('storeImg', storeImg)
-            source.searchParams.set('amountToCharge', amountToCharge)
-            source.searchParams.set('paymentDescription', paymentDescription)
-            source.searchParams.set('supportedCurrencies', encodedSupportedCurrencies)
-            setIsGenerated(true)
-            setPaymentLink(source.href)
-        }}
+              )
+              var source = new URL(`${window.location.origin}`)
+              source.searchParams.set('name', name)
+              source.searchParams.set('storeImg', storeImg)
+              source.searchParams.set('amountToCharge', amountToCharge)
+              source.searchParams.set('paymentDescription', paymentDescription)
+              source.searchParams.set('supportedCurrencies', encodedSupportedCurrencies)
+              setIsGenerated(true)
+              setPaymentLink(source.href)
+            }else{
+              setIsNudged(true)
+            }
+          }}
       >
         {({
           errors,
@@ -518,9 +526,9 @@ function ModalConfig() {
                   display="flex"
                   justifyContent="center"
                   alignItems="center"
-                  sx={{ m: 2 }}
+                  sx={{ my: 4 }}
                 >
-                  <LoadingButton loading={isSubmitting}  type="submit" variant="contained">
+                  <LoadingButton sx={{ width: '100%', p:2 }} loading={isSubmitting}  type="submit" variant="contained">
                     Generate Payment Link{' '}
                   </LoadingButton>
                 </Box>
@@ -529,6 +537,11 @@ function ModalConfig() {
             <Snackbar open={open} autoHideDuration={5000} onClose={handleClose}>
               <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
                 Link Copied!
+              </Alert>
+            </Snackbar>
+            <Snackbar open={isNudged} autoHideDuration={5000} onClose={handleClose}>
+              <Alert onClose={handleClose} severity="info" sx={{ width: '100%' }}>
+                 Kindly Confirm your Wallet Address. Any transaction done to a wrong address can't be recovered.
               </Alert>
             </Snackbar>
           </form>
