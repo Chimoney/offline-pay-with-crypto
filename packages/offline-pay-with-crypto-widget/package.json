@@ -1,6 +1,6 @@
 {
   "name": "@chimoney/offline-pay-with-crypto-widget",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "frontend for offline-pay-with-crypto",
   "author": "Uchi Uchibeke <uchi.uchibeke@gmail.com>",
   "license": "MIT",
@@ -40,15 +40,19 @@
     "@emotion/react": "^11.5.0",
     "@emotion/styled": "^11.3.0",
     "@mui/icons-material": "^5.0.5",
+    "@mui/lab": "^5.0.0-alpha.59",
     "@mui/material": "^5.0.6",
     "@testing-library/jest-dom": "^5.15.0",
     "@testing-library/react": "^11.2.7",
     "@testing-library/user-event": "^12.8.3",
+    "axios": "^0.24.0",
+    "formik": "^2.2.9",
     "framer-motion": "^4.1.17",
     "react-copy-to-clipboard": "^5.0.4",
     "react-qr-code": "^2.0.2",
     "react-scripts": "4.0.3",
-    "react-select": "^5.2.0"
+    "react-select": "^5.2.0",
+    "yup": "^0.32.11"
   },
   "eslintConfig": {
     "extends": [
