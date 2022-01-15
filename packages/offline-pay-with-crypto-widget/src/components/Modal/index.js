@@ -114,10 +114,10 @@ const ModalComponent = ({
         message: `Payment to ${senderName} failed. Please contact  ${senderName}.`,
       }
       if (code === 'CUSD') {
-        const action = await performActions(async (kit) => {
+        await performActions(async (kit) => {
           const cUSD = await kit.contracts.getStableToken('cUSD')
           amount = kit.web3.utils.toWei(String(amount), 'ether')
-          const result = await cUSD
+          await cUSD
             .transferWithComment(
               selectedCrypto?.walletAddress,
               amount,
@@ -134,10 +134,10 @@ const ModalComponent = ({
             })
         })
       } else if (code === 'CELO') {
-        const action = await performActions(async (kit) => {
+        await performActions(async (kit) => {
           const celo = await kit.contracts.getGoldToken()
           amount = kit.web3.utils.toWei(String(amount), 'ether')
-          const result = await celo
+          await celo
             .transferWithComment(
               selectedCrypto?.walletAddress,
               amount,

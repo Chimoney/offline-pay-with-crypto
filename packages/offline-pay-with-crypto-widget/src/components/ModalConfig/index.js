@@ -179,7 +179,7 @@ function ModalConfig() {
           setTouched,
           values,
         }) => (
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit} id="modal-config">
             <Box sx={{ bgcolor: 'white', my: 4 }}>
               <Container sx={{ boxShadow: 2, p: 3 }} maxWidth="md">
                 <Typography variant="h4" gutterBottom align="center">
@@ -215,6 +215,7 @@ function ModalConfig() {
                     getIn(errors, 'paymentDescription')
                   }
                   name="paymentDescription"
+                  id="paymentDescription"
                   rows={3}
                   variant="outlined"
                 />
@@ -494,6 +495,7 @@ function ModalConfig() {
                               style={{
                                 height: '63px',
                               }}
+                              id="add-token-btn"
                             >
                               <AddCircleIcon /> Add new payment option
                             </LoadingButton>
