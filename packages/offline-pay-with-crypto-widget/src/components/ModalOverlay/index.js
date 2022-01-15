@@ -1,9 +1,8 @@
-import * as React from 'react';
-import { motion } from "framer-motion";
+import * as React from 'react'
+import { motion } from 'framer-motion'
 import './index.css'
 
 export const ModalOverlay = ({ onClick, children }) => {
-
   return (
     <motion.div
       onClick={onClick}
@@ -14,5 +13,5 @@ export const ModalOverlay = ({ onClick, children }) => {
     >
       {children}
     </motion.div>
-  );
-};
+  )
+}

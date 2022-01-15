@@ -1,13 +1,13 @@
 import * as React from 'react'
 import * as Yup from 'yup'
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect } from 'react'
 import Container from '@mui/material/Container'
 import TextField from '@mui/material/TextField'
 import Box from '@mui/material/Box'
 import MenuItem from '@mui/material/MenuItem'
 import FormControl from '@mui/material/FormControl'
-import { icons as cryptoIcon } from '../icons';
-import LoadingButton from '@mui/lab/LoadingButton';
+import { icons as cryptoIcon } from '../icons'
+import LoadingButton from '@mui/lab/LoadingButton'
 import Stack from '@mui/material/Stack'
 import Grid from '@mui/material/Grid'
 import Tooltip from '@mui/material/Tooltip'
@@ -15,10 +15,11 @@ import { CopyToClipboard } from 'react-copy-to-clipboard'
 import Typography from '@mui/material/Typography'
 import Snackbar from '@mui/material/Snackbar'
 import MuiAlert from '@mui/material/Alert'
-import CopyAllIcon from '@mui/icons-material/CopyAll';
-import InputAdornment from '@mui/material/InputAdornment';
-import { Formik, FieldArray, getIn } from 'formik';
+import CopyAllIcon from '@mui/icons-material/CopyAll'
+import InputAdornment from '@mui/material/InputAdornment'
+import { Formik, FieldArray, getIn } from 'formik'
 import { coinApi } from '../../services'
+import AddCircleIcon from '@mui/icons-material/AddCircle'
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />
@@ -26,13 +27,13 @@ const Alert = React.forwardRef(function Alert(props, ref) {
 
 const currencies = [
   {
-    code: 'CELO'
+    code: 'CELO',
   },
   {
-    code: 'CUSD'
-  }
+    code: 'CUSD',
+  },
   //TODO: add other supported currencies
-];
+]
 
 function ModalConfig() {
   const [paymentLink, setPaymentLink] = useState('')
@@ -41,13 +42,12 @@ function ModalConfig() {
   const [isRateLoading, setIsRateLoading] = useState(false)
   const [isNudged, setIsNudged] = useState(false)
 
-
   const [config, setConfig] = useState({
     name: '',
     storeImg: '',
     amountToCharge: 0,
     paymentDescription: '',
-    supportedCurrencies: []
+    supportedCurrencies: [{ code: 'cUSD', walletAddress: '', amount: 0 }],
   })
 
   const [selectedCoin, setSelectedCoin] = useState('CELO')
@@ -59,7 +59,6 @@ function ModalConfig() {
   const handleClick = () => {
     setOpen(true)
   }
-
 
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {
@@ -84,32 +83,29 @@ function ModalConfig() {
       }
     }
 
-    setConfig({ name, amountToCharge, storeImg, paymentDescription, supportedCurrencies: arrayFromSupportedCurrencies })
+    setConfig({
+      name,
+      amountToCharge,
+      storeImg,
+      paymentDescription,
+      supportedCurrencies: arrayFromSupportedCurrencies,
+    })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const getExchanges = async (code) => {
     try {
       setIsRateLoading(true)
-      const res = await coinApi.getExchange(code);
-      console.log({res})
-      if(!res.error){
+      const res = await coinApi.getExchange(code)
+      if (!res.error) {
         setIsRateLoading(false)
         return res
       }
     } catch (error) {
-      console.error({error})
+      console.error({ error })
       setIsRateLoading(false)
     }
   }
-
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const handleAmountInput = useCallback((e) => {
-    const keyCode = e.keyCode;
-    if (keyCode !== 8 && !e.code.includes("Digit") && keyCode !== 37 && keyCode !== 39) {
-      e.preventDefault();
-    }
-  }, []);
 
   return (
     <>
@@ -120,48 +116,58 @@ function ModalConfig() {
         initialValues={{
           ...config,
         }}
-        validationSchema={
-          Yup.object().shape({
-            name: Yup.string().required('Name is required'),
-            storeImg: Yup.string().required('Store Image URL is required'),
-            amountToCharge: Yup.number('Amount to charge must be a number').required().positive().integer(),
-            paymentDescription: Yup.string().required('Payment Description is required'),
-            supportedCurrencies: Yup.array().of(Yup.object().shape({
-              walletAddress: Yup.string().matches(/^(0x)?[0-9a-f]{40}$/i, 'Invalid Wallet Address').required('Wallet Address is required'),
+        validationSchema={Yup.object().shape({
+          name: Yup.string().required('Name is required'),
+          storeImg: Yup.string().required('Logo URL is required'),
+          amountToCharge: Yup.number('Amount to charge must be a number')
+            .required()
+            .positive(),
+          paymentDescription: Yup.string().required(
+            'Payment Description is required'
+          ),
+          supportedCurrencies: Yup.array().of(
+            Yup.object().shape({
+              walletAddress: Yup.string()
+                .matches(/^(0x)?[0-9a-f]{40}$/i, 'Invalid Wallet Address')
+                .required('Wallet Address is required'),
               code: Yup.string().required('Currency code is required'),
               amount: Yup.number().required('Amount to charge is required'),
             })
-            )
-          })}
-        onSubmit={async (
-          values,
-          { setErrors, setStatus, setSubmitting }
-        ) => {
+          ),
+        })}
+        onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
+          if (isNudged) {
+            const {
+              name,
+              storeImg,
+              paymentDescription,
+              amountToCharge,
+              supportedCurrencies,
+            } = values
 
-          if(isNudged){
-
-            const { name, storeImg, paymentDescription, amountToCharge, supportedCurrencies} = values;
-
-            let objectFromSupoortedCurrencies = {};
+            let objectFromSupoortedCurrencies = {}
 
             supportedCurrencies.forEach((curr) => {
-              objectFromSupoortedCurrencies[`${curr.code}`] = curr;
+              objectFromSupoortedCurrencies[`${curr.code}`] = curr
             })
             const encodedSupportedCurrencies = encodeURIComponent(
               JSON.stringify(objectFromSupoortedCurrencies)
-              )
-              var source = new URL(`${window.location.origin}`)
-              source.searchParams.set('name', name)
-              source.searchParams.set('storeImg', storeImg)
-              source.searchParams.set('amountToCharge', amountToCharge)
-              source.searchParams.set('paymentDescription', paymentDescription)
-              source.searchParams.set('supportedCurrencies', encodedSupportedCurrencies)
-              setIsGenerated(true)
-              setPaymentLink(source.href)
-            }else{
-              setIsNudged(true)
-            }
-          }}
+            )
+            var source = new URL(`${window.location.origin}`)
+            source.searchParams.set('name', name)
+            source.searchParams.set('storeImg', storeImg)
+            source.searchParams.set('amountToCharge', amountToCharge)
+            source.searchParams.set('paymentDescription', paymentDescription)
+            source.searchParams.set(
+              'supportedCurrencies',
+              encodedSupportedCurrencies
+            )
+            setIsGenerated(true)
+            setPaymentLink(source.href)
+          } else {
+            setIsNudged(true)
+          }
+        }}
       >
         {({
           errors,
@@ -173,10 +179,10 @@ function ModalConfig() {
           setTouched,
           values,
         }) => (
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit} id="modal-config">
             <Box sx={{ bgcolor: 'white', my: 4 }}>
               <Container sx={{ boxShadow: 2, p: 3 }} maxWidth="md">
-                <Typography variant="h5" gutterBottom>
+                <Typography variant="h4" gutterBottom align="center">
                   Generate Payment Link
                 </Typography>
 
@@ -186,22 +192,11 @@ function ModalConfig() {
                   name="name"
                   onChange={handleChange}
                   error={Boolean(
-                    getIn(
-                      touched,
-                      "name"
-                    ) &&
-                    getIn(errors, "name")
+                    getIn(touched, 'name') && getIn(errors, 'name')
                   )}
-
-                  helperText={
-                    getIn(
-                      touched,
-                      "name"
-                    ) &&
-                    getIn(errors, "name")
-                  }
+                  helperText={getIn(touched, 'name') && getIn(errors, 'name')}
                   fullWidth
-                  label="Name"
+                  label="Business/Receiver Name"
                   variant="outlined"
                 />
                 <TextField
@@ -209,25 +204,19 @@ function ModalConfig() {
                   value={values?.paymentDescription}
                   onChange={handleChange}
                   fullWidth
-                  label="Description"
+                  label="Description, Comments or Payment meta data"
                   multiline
                   error={Boolean(
-                    getIn(
-                      touched,
-                      "paymentDescription"
-                    ) &&
-                    getIn(errors, "paymentDescription")
+                    getIn(touched, 'paymentDescription') &&
+                      getIn(errors, 'paymentDescription')
                   )}
-
                   helperText={
-                    getIn(
-                      touched,
-                      "paymentDescription"
-                    ) &&
-                    getIn(errors, "paymentDescription")
+                    getIn(touched, 'paymentDescription') &&
+                    getIn(errors, 'paymentDescription')
                   }
                   name="paymentDescription"
-                  rows={6}
+                  id="paymentDescription"
+                  rows={3}
                   variant="outlined"
                 />
                 <TextField
@@ -236,56 +225,48 @@ function ModalConfig() {
                   value={values?.storeImg}
                   onChange={handleChange}
                   error={Boolean(
-                    getIn(
-                      touched,
-                      "storeImg"
-                    ) &&
-                    getIn(errors, "storeImg")
+                    getIn(touched, 'storeImg') && getIn(errors, 'storeImg')
                   )}
-
                   helperText={
-                    getIn(
-                      touched,
-                      "storeImg"
-                    ) &&
-                    getIn(errors, "storeImg")
+                    getIn(touched, 'storeImg') && getIn(errors, 'storeImg')
                   }
                   name="storeImg"
                   fullWidth
-                  label="Store Image URL"
+                  label="URL of logo"
                   variant="outlined"
+                  type="url"
                 />
                 <TextField
                   margin="normal"
                   placeholder="Amount to charge in USD"
                   value={values?.amountToCharge}
-                  onKeyDown={handleAmountInput}
+                  // onKeyDown={handleAmountInput}
                   onChange={handleChange}
                   error={Boolean(
-                    getIn(
-                      touched,
-                      "amountToCharge"
-                    ) &&
-                    getIn(errors, "amountToCharge")
+                    getIn(touched, 'amountToCharge') &&
+                      getIn(errors, 'amountToCharge')
                   )}
-
                   helperText={
-                    getIn(
-                      touched,
-                      "amountToCharge"
-                    ) &&
-                    getIn(errors, "amountToCharge")
+                    getIn(touched, 'amountToCharge') &&
+                    getIn(errors, 'amountToCharge')
                   }
                   name="amountToCharge"
                   fullWidth
                   label="Amount to Charge in USD"
                   variant="outlined"
+                  type="number"
                 />
-                <Box sx={{ my: 2 }}>Supported Currencies</Box>
+                <Box sx={{ my: 2 }}>
+                  {' '}
+                  <Typography variant="h5" align="center">
+                    Currency options to enable
+                  </Typography>{' '}
+                </Box>
+                <hr />
                 <FieldArray
                   name="supportedCurrencies"
-                  render={arrayHelpers => {
-                    const { supportedCurrencies } = values;
+                  render={(arrayHelpers) => {
+                    const { supportedCurrencies } = values
                     // arrayHelpers.remove() add remove currency feataure
                     return (
                       <>
@@ -293,7 +274,59 @@ function ModalConfig() {
                           supportedCurrencies.map((curr, idx) => {
                             return (
                               <div key={idx}>
-                                <Stack direction={{ xs: 'column', sm: 'row' }}  mt={3} spacing={2}>
+                                <Stack
+                                  direction={{ xs: 'column', sm: 'row' }}
+                                  mt={3}
+                                  spacing={2}
+                                >
+                                  <FormControl sx={{ width: '100%' }}>
+                                    <TextField
+                                      id="code"
+                                      defaultValue={curr?.code}
+                                      value={curr?.code}
+                                      name={`supportedCurrencies.${idx}.code`}
+                                      error={Boolean(
+                                        getIn(
+                                          touched,
+                                          `supportedCurrencies.${idx}.code`
+                                        ) &&
+                                          getIn(
+                                            errors,
+                                            `supportedCurrencies.${idx}.code`
+                                          )
+                                      )}
+                                      helperText={
+                                        getIn(
+                                          touched,
+                                          `supportedCurrencies.${idx}.code`
+                                        ) &&
+                                        getIn(
+                                          errors,
+                                          `supportedCurrencies.${idx}.code`
+                                        )
+                                      }
+                                      fullWidth
+                                      margin="normal"
+                                      label="Pay with"
+                                      variant="outlined"
+                                      disabled
+                                      InputProps={{
+                                        startAdornment: (
+                                          <InputAdornment position="start">
+                                            <img
+                                              style={{ width: '30px' }}
+                                              src={
+                                                cryptoIcon[
+                                                  curr?.code?.toUpperCase()
+                                                ]?.icon
+                                              }
+                                              alt=""
+                                            />
+                                          </InputAdornment>
+                                        ),
+                                      }}
+                                    />
+                                  </FormControl>
                                   <FormControl sx={{ width: '100%' }}>
                                     <TextField
                                       margin="normal"
@@ -304,15 +337,20 @@ function ModalConfig() {
                                           touched,
                                           `supportedCurrencies.${idx}.walletAddress`
                                         ) &&
-                                        getIn(errors, `supportedCurrencies.${idx}.walletAddress`)
+                                          getIn(
+                                            errors,
+                                            `supportedCurrencies.${idx}.walletAddress`
+                                          )
                                       )}
-
                                       helperText={
                                         getIn(
                                           touched,
                                           `supportedCurrencies.${idx}.walletAddress`
                                         ) &&
-                                        getIn(errors, `supportedCurrencies.${idx}.walletAddress`)
+                                        getIn(
+                                          errors,
+                                          `supportedCurrencies.${idx}.walletAddress`
+                                        )
                                       }
                                       onChange={handleChange}
                                       fullWidth
@@ -331,90 +369,56 @@ function ModalConfig() {
                                           touched,
                                           `supportedCurrencies.${idx}.amount`
                                         ) &&
-                                        getIn(errors, `supportedCurrencies.${idx}.amount`)
+                                          getIn(
+                                            errors,
+                                            `supportedCurrencies.${idx}.amount`
+                                          )
                                       )}
-
                                       helperText={
                                         getIn(
                                           touched,
                                           `supportedCurrencies.${idx}.amount`
                                         ) &&
-                                        getIn(errors, `supportedCurrencies.${idx}.amount`)
+                                        getIn(
+                                          errors,
+                                          `supportedCurrencies.${idx}.amount`
+                                        )
                                       }
                                       onChange={handleChange}
                                       label="Amount to charge"
                                       variant="outlined"
-                                      disabled
+                                      // disabled
                                     />
                                   </FormControl>
                                 </Stack>
-                                <Stack  direction={{ xs: 'column', sm: 'row' }} mt={3} spacing={2}>
-
-                                  <FormControl sx={{ width: '100%' }}>
-                                    <TextField
-                                      id="code"
-                                      defaultValue={curr?.code}
-                                      value={curr?.code}
-                                      name={`supportedCurrencies.${idx}.code`}
-                                      error={Boolean(
-                                        getIn(
-                                          touched,
-                                          `supportedCurrencies.${idx}.code`
-                                        ) &&
-                                        getIn(errors, `supportedCurrencies.${idx}.code`)
-                                      )}
-
-                                      helperText={
-                                        getIn(
-                                          touched,
-                                          `supportedCurrencies.${idx}.code`
-                                        ) &&
-                                        getIn(errors, `supportedCurrencies.${idx}.code`)
-                                      }
-                                      fullWidth
-                                      margin="normal"
-                                      label="Pay with"
-                                      select
-                                      variant="outlined"
-                                      disabled
-                                    >
-                                      {currencies.map((currency) => {
-                                        const upperCode = currency?.code?.toUpperCase()
-                                        const cIcon = cryptoIcon[upperCode]
-
-                                        return (
-                                          <MenuItem key={currency.code} value={currency.code}>
-                                            <span className="label">
-                                              <img
-                                                style={{ width: '30px' }}
-                                                src={cIcon?.icon}
-                                                alt=""
-                                              />{' '}
-                                              {currency.code} ({cIcon?.name})
-                                            </span>
-                                          </MenuItem>
-                                        )
-                                      })}
-                                    </TextField>
-                                  </FormControl>
-                                  <Box
-                                    display="flex"
-                                    justifyContent="end"
-                                    alignItems="center"
-                                    sx={{ width: '100%' }}
-                                  >
-                                    <LoadingButton type="button" onClick={() => {
+                                <Box
+                                  display="flex"
+                                  justifyContent="end"
+                                  alignItems="center"
+                                  sx={{ width: '100%' }}
+                                >
+                                  <LoadingButton
+                                    type="button"
+                                    onClick={() => {
                                       arrayHelpers.remove(idx)
-                                    }} variant="contained">
-                                      REMOVE CURRENCY
-                                    </LoadingButton>
-                                  </Box>
-                                </Stack>
+                                    }}
+                                    variant="outlined"
+                                    size="small"
+                                    color="error"
+                                  >
+                                    Remove Option
+                                  </LoadingButton>
+                                </Box>
                               </div>
                             )
                           })}
 
-                        <Stack  direction={{ xs: 'column', sm: 'row' }} mt={6} spacing={2}>
+                        <hr />
+                        <Stack
+                          direction={{ xs: 'column', sm: 'row' }}
+                          mt={6}
+                          spacing={2}
+                        >
                           <Box sx={{ width: '100%' }}>
                             <TextField
                               id="selectedCoin"
@@ -432,7 +436,10 @@ function ModalConfig() {
                                 const cIcon = cryptoIcon[upperCode]
 
                                 return (
-                                  <MenuItem key={currency.code} value={currency.code}>
+                                  <MenuItem
+                                    key={currency.code}
+                                    value={currency.code}
+                                  >
                                     <span className="label">
                                       <img
                                         style={{ width: '30px' }}
@@ -452,29 +459,52 @@ function ModalConfig() {
                             alignItems="center"
                             sx={{ width: '100%' }}
                           >
-                            <LoadingButton loading={isRateLoading} type="button" onClick={ async () => {
-                              if (supportedCurrencies.findIndex(cur => cur?.code?.toUpperCase() === selectedCoin?.toUpperCase()) === -1 && (values.amountToCharge !== 0)) {
-                                 const data = await getExchanges(selectedCoin)
+                            <LoadingButton
+                              loading={isRateLoading}
+                              type="button"
+                              onClick={async () => {
+                                if (
+                                  supportedCurrencies.findIndex(
+                                    (cur) =>
+                                      cur?.code?.toUpperCase() ===
+                                      selectedCoin?.toUpperCase()
+                                  ) === -1 &&
+                                  values.amountToCharge !== 0
+                                ) {
+                                  const data = await getExchanges(selectedCoin)
 
-                                 arrayHelpers.push({
-                                  amount: !data?.[selectedCoin]?.error ?  (values?.amountToCharge / data?.[selectedCoin]?.rate).toFixed(3) : 0, // TODO: confirm rounded offs from Uchi
-                                  walletAddress: '',
-                                  code: selectedCoin
-                                })
-                              } else {
-                                setTouched({
-                                  amountToCharge: true,
-                                })
-
-                              }
-                            }} variant="contained">
-                              ADD SUPPORTED CURRENCY
+                                  arrayHelpers.push({
+                                    amount: !data?.[selectedCoin]?.error
+                                      ? (
+                                          values?.amountToCharge /
+                                          data?.[selectedCoin]?.rate
+                                        ).toFixed(3)
+                                      : 0, // TODO: confirm rounded offs from Uchi
+                                    walletAddress: '',
+                                    code: selectedCoin,
+                                  })
+                                } else {
+                                  setTouched({
+                                    amountToCharge: true,
+                                  })
+                                }
+                              }}
+                              variant="text"
+                              size="large"
+                              fullWidth
+                              style={{
+                                height: '63px',
+                              }}
+                              id="add-token-btn"
+                            >
+                              <AddCircleIcon /> Add new payment option
                             </LoadingButton>
                           </Box>
                         </Stack>
                       </>
                     )
-                  }} />
+                  }}
+                />
                 {isGenerated ? (
                   <Grid
                     item
@@ -495,7 +525,9 @@ function ModalConfig() {
                     >
                       <Tooltip
                         title={
-                          copiedText === paymentLink ? 'Copied!' : 'Copy To Clipboard'
+                          copiedText === paymentLink
+                            ? 'Copied!'
+                            : 'Copy To Clipboard'
                         }
                         placement="top"
                       >
@@ -528,20 +560,39 @@ function ModalConfig() {
                   alignItems="center"
                   sx={{ my: 4 }}
                 >
-                  <LoadingButton sx={{ width: '100%', p:2 }} loading={isSubmitting}  type="submit" variant="contained">
+                  <LoadingButton
+                    sx={{ width: '100%', p: 2 }}
+                    loading={isSubmitting}
+                    type="submit"
+                    variant="contained"
+                    size="large"
+                  >
                     Generate Payment Link{' '}
                   </LoadingButton>
                 </Box>
               </Container>
             </Box>
             <Snackbar open={open} autoHideDuration={5000} onClose={handleClose}>
-              <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+              <Alert
+                onClose={handleClose}
+                severity="success"
+                sx={{ width: '100%' }}
+              >
                 Link Copied!
               </Alert>
             </Snackbar>
-            <Snackbar open={isNudged} autoHideDuration={5000} onClose={handleClose}>
-              <Alert onClose={handleClose} severity="info" sx={{ width: '100%' }}>
-                 Kindly Confirm your Wallet Address. Any transaction done to a wrong address can't be recovered.
+            <Snackbar
+              open={isNudged}
+              autoHideDuration={5000}
+              onClose={handleClose}
+            >
+              <Alert
+                onClose={handleClose}
+                severity="warning"
+                sx={{ width: '100%' }}
+              >
+                Kindly Confirm your Wallet Address. Any Payment sent to a wrong
+                address cannot be recovered.
               </Alert>
             </Snackbar>
           </form>
