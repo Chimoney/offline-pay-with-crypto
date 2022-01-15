@@ -11,7 +11,8 @@ import Paper from '@mui/material/Paper'
 import QRCode from 'react-qr-code'
 import { motion } from 'framer-motion'
 import { icons as cryptoIcon } from '../icons';
-import { ContractKitProvider } from '@celo-tools/use-contractkit'
+import { ContractKitProvider} from '@celo-tools/use-contractkit'
+import { useWalletConnectConnector } from '@celo-tools/use-contractkit/lib/connectors/useWalletConnectConnector'
 import '@celo-tools/use-contractkit/lib/styles.css'
 import { useContractKit } from '@celo-tools/use-contractkit'
 import ModalConfig from '../ModalConfig'
@@ -69,6 +70,10 @@ const ModalComponent = ({
     }
   }
 
+  const getDeepLink = (uri) => {
+    return `celo://wallet/wc?uri=${uri}`;
+  };
+
   useEffect(() => {
     setNotValid(invalid())
   }, [setNotValid])
@@ -76,6 +81,15 @@ const ModalComponent = ({
   useEffect(() => {
     setSelectedCrypto(supportedCurrencies?.['CELO'])
   }, [])
+
+  // URI for Valora/Metamask QRCode Connection
+  // https://github.com/celo-org/use-contractkit/blob/1bc9de31c4bc071bbc2519569cecaa2ec2a69684/packages/use-contractkit/src/screens/valora.tsx#L18
+  const uri = useWalletConnectConnector(
+    () => {},
+    true,
+    getDeepLink,
+    selectedCrypto?.walletAddress
+  );
 
   if (notValid) {
     return (
@@ -248,7 +262,7 @@ const ModalComponent = ({
               <div className="qr-container">
                 <div className="qr-div">
                  { selectedCrypto?.walletAddress && <QRCode
-                    value={selectedCrypto?.walletAddress || ''}
+                    value={uri || ''}
                     size={150}
                     className="qr-code"
                   />
