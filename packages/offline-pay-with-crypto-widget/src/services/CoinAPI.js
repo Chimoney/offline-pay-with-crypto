@@ -1,6 +1,5 @@
 import axios from 'axios'
 const apiKey = process.env.REACT_APP_COIN_API_KEY
-console.log({ apiKey })
 
 const axiosApiInstance = axios.create({
   headers: {

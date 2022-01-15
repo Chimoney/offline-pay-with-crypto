@@ -8,7 +8,7 @@ import { Container, TextField, MenuItem, Button, Grid } from '@mui/material'
 import Box from '@mui/material/Box'
 import './modal.css'
 import Paper from '@mui/material/Paper'
-import QRCode from 'react-qr-code'
+import QRCode from 'qrcode.react'
 import { motion } from 'framer-motion'
 import { icons as cryptoIcon } from '../icons'
 import { ContractKitProvider } from '@celo-tools/use-contractkit'
@@ -16,6 +16,9 @@ import { useWalletConnectConnector } from '@celo-tools/use-contractkit/lib/conne
 import '@celo-tools/use-contractkit/lib/styles.css'
 import { useContractKit } from '@celo-tools/use-contractkit'
 import ModalConfig from '../ModalConfig'
+import Alert from '../Alert'
+import LockIcon from '@mui/icons-material/Lock'
+// import { BigNumber } from 'bignumber.js'
 
 const dropIn = {
   hidden: {
@@ -43,10 +46,14 @@ const ModalComponent = ({
   paymentDescription,
   store_img,
   supportedCurrencies,
+  amountToCharge = 0,
 }) => {
   const [state, setState] = useState('address')
   const [email, setEmail] = useState('')
+  const [senderName, setSenderName] = useState('')
   const [notValid, setNotValid] = useState(false)
+  const [alertDetails, setAlertDetails] = useState({ message: '' })
+
   supportedCurrencies =
     Object.keys(supportedCurrencies).length < 1
       ? { CELO: { code: 'CELO', walletAddress: 'm', amount: 0 } }
@@ -55,7 +62,7 @@ const ModalComponent = ({
   const [selectedCrypto, setSelectedCrypto] = useState(
     supportedCurrencies?.['CELO']
   )
-  const { getConnectedKit, performActions, address } = useContractKit()
+  const { performActions } = useContractKit()
 
   const invalid = () => {
     if (
@@ -81,11 +88,8 @@ const ModalComponent = ({
 
   useEffect(() => {
     setNotValid(invalid())
-  }, [setNotValid])
-
-  useEffect(() => {
     setSelectedCrypto(supportedCurrencies?.['CELO'])
-  }, [])
+  }, [setNotValid, alertDetails.message])
 
   // URI for Valora/Metamask QRCode Connection
   // https://github.com/celo-org/use-contractkit/blob/1bc9de31c4bc071bbc2519569cecaa2ec2a69684/packages/use-contractkit/src/screens/valora.tsx#L18
@@ -96,44 +100,76 @@ const ModalComponent = ({
     selectedCrypto?.walletAddress
   )
 
-  if (notValid) {
-    return <ModalConfig />
-  }
   async function transfer() {
     const code = selectedCrypto?.code?.toUpperCase()
     try {
-      const kit = await getConnectedKit()
-
-      const toVal = (amount) => {
-        return amount * 1
+      let amount = selectedCrypto?.amount
+      const successConfirmation = {
+        title: 'Payment sent',
+        message: `Payment sent to ${senderName}. Please check your wallet balance.`,
       }
 
+      const failureConfirmation = {
+        title: 'Payment failed',
+        message: `Payment to ${senderName} failed. Please contact  ${senderName}.`,
+      }
       if (code === 'CUSD') {
-        const cUSD = await kit.contracts.getStableToken()
         const action = await performActions(async (kit) => {
-          const cUSD = await kit.contracts.getStableToken()
+          const cUSD = await kit.contracts.getStableToken('cUSD')
+          amount = kit.web3.utils.toWei(String(amount), 'ether')
           const result = await cUSD
-            .transfer(selectedCrypto?.walletAddress, selectedCrypto?.amount)
+            .transferWithComment(
+              selectedCrypto?.walletAddress,
+              amount,
+              paymentDescription
+            )
             .sendAndWaitForReceipt()
-          console.log({ result })
+            .then((transaction = {}) => {
+              const { status, transactionHash, blockNumber } = transaction
+              if (status && transactionHash.length && blockNumber > 1) {
+                setAlertDetails(successConfirmation)
+              } else {
+                setAlertDetails(failureConfirmation)
+              }
+            })
         })
       } else if (code === 'CELO') {
         const action = await performActions(async (kit) => {
           const celo = await kit.contracts.getGoldToken()
+          amount = kit.web3.utils.toWei(String(amount), 'ether')
           const result = await celo
-            .transfer(selectedCrypto?.walletAddress, selectedCrypto?.amount)
+            .transferWithComment(
+              selectedCrypto?.walletAddress,
+              amount,
+              paymentDescription
+            )
             .sendAndWaitForReceipt()
-          console.log({ result })
+            .then((transaction) => {
+              const { status, transactionHash, blockNumber } = transaction
+              if (status && transactionHash.length && blockNumber > 1) {
+                setAlertDetails(successConfirmation)
+              } else {
+                setAlertDetails(failureConfirmation)
+              }
+            })
         })
+      } else {
+        alert(`Payment with ${code || 'token'} is not supported at this time`)
       }
     } catch (error) {
       console.error(error)
+      alert(error)
     }
   }
+
   const isCelo =
     selectedCrypto?.walletAddress &&
     (selectedCrypto.code?.toUpperCase() === 'CELO' ||
       selectedCrypto.code?.toUpperCase() === 'CUSD')
+
+  if (notValid) {
+    return <ModalConfig />
+  }
 
   return (
     <motion.div
@@ -168,16 +204,21 @@ const ModalComponent = ({
             action={
               <>
                 <Typography variant="body2" color="text.secondary">
-                  TOTAL
+                  Total:
                 </Typography>
                 <Typography variant="body2" color="text.primary">
                   {`${selectedCrypto?.amount} ${selectedCrypto?.code}`}
                 </Typography>
               </>
             }
-            title={`${name}`}
+            title={name}
           />
-          <Typography variant="subtitle2" align="center" color="text.primary">
+          <Typography
+            variant="subtitle2"
+            align="center"
+            color="text.primary"
+            style={{ overflow: 'auto' }}
+          >
             {paymentDescription}
           </Typography>
           <br />
@@ -246,7 +287,7 @@ const ModalComponent = ({
               color="text.primary"
             >
               {' '}
-              {selectedCrypto?.amount} {selectedCrypto?.code}
+              ${amountToCharge} USD
             </Typography>
           </Paper>
           <br />
@@ -272,11 +313,7 @@ const ModalComponent = ({
               <div className="qr-container">
                 <div className="qr-div">
                   {selectedCrypto?.walletAddress && (
-                    <QRCode
-                      value={selectedCrypto?.walletAddress || ''}
-                      size={150}
-                      className="qr-code"
-                    />
+                    <QRCode value={uri} size={150} className="qr-code" />
                   )}
                 </div>
                 <div className="qr-text">
@@ -290,11 +327,11 @@ const ModalComponent = ({
                     <span className="code">
                       {selectedCrypto?.walletAddress}{' '}
                     </span>
-                    <img
+                    {/* <img
                       id="qr-code"
-                      src="https:img.icons8.com/material-outlined/14/2138A8/copy.png"
+                      src="https:img.icons8.com/material-outlined/14/35D07F/copy.png"
                       alt=""
-                    />
+                    /> */}
                   </div>
                   <Typography variant="caption">
                     Only send {selectedCrypto?.code} to the address
@@ -309,25 +346,38 @@ const ModalComponent = ({
                       variant="contained"
                       color="primary"
                     >
-                      Pay from Wallet
+                      Pay with Web3 Wallet
                     </Button>
                   </div>
                 )}
               </Grid>
             </Grid>
           ) : (
-            <Grid container>
+            <Grid container style={{ minHeight: '200px' }}>
               <Grid xs={12} align="center" item>
                 <div className="agent-section">
-                  <h1>Enter email to send the payment details to</h1>
+                  <Typography variant="body1">
+                    Share details with an Agent
+                  </Typography>
                   <TextField
                     id="agent-email"
                     value={email}
-                    label="Email"
+                    label="Agent or Payer email"
                     variant="outlined"
                     type="email"
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="example@gmail.com"
+                    style={{ maxWidth: '400px', marginBottom: '20px' }}
+                    fullWidth
+                  />
+                  <TextField
+                    id="sender-name"
+                    value={senderName}
+                    label="Your name"
+                    variant="outlined"
+                    type="name"
+                    onChange={(e) => setSenderName(e.target.value)}
+                    placeholder="Nkechi Ayodel"
                     style={{ maxWidth: '400px' }}
                     fullWidth
                   />
@@ -350,11 +400,24 @@ const ModalComponent = ({
           <br />
           <br />
           <hr className="hr" />
-          <Typography variant="h6" align="center" color="text.primary">
-            Secured by cryptography
-          </Typography>
+          <Grid
+            container
+            alignItems="center"
+            style={{
+              justifyContent: 'center',
+            }}
+          >
+            <LockIcon
+              sx={{ width: '0.7em', marginRight: '3px' }}
+              color="success"
+            />
+            <Typography variant="subtitle1" align="center">
+              Secured by Cryptography
+            </Typography>
+          </Grid>
         </Box>
       </Container>
+      {alertDetails?.message && <Alert {...alertDetails} />}
     </motion.div>
   )
 }

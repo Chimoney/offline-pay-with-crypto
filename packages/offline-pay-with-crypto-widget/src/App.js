@@ -10,6 +10,7 @@ function App() {
   const supportedCurrenciesFromParams = url.searchParams.get(
     'supportedCurrencies'
   )
+  const amountToCharge = url.searchParams.get('amountToCharge')
   const supportedCurrencies =
     JSON.parse(decodeURIComponent(supportedCurrenciesFromParams)) || {}
 
@@ -18,6 +19,7 @@ function App() {
     store_img,
     paymentDescription,
     supportedCurrencies,
+    amountToCharge,
   }
   return <Modal {...config} />
 }
