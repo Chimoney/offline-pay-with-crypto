@@ -11,7 +11,7 @@ function HomepageHeader() {
   return (
     <header className={clsx('hero hero--primary', styles.heroBanner)}>
       <div className="container">
-        <h1 className="hero__title">Offline Pay with Crypto</h1>
+        <h1 className="hero__title">Offline Pay with Celo</h1>
         <p className="hero__subtitle"> Learn how to build amazing crypto payment experiences with our Crypto Service</p>
         <div className={styles.buttons}>
           <Link
@@ -29,7 +29,7 @@ export default function Home() {
   const {siteConfig} = useDocusaurusContext();
   return (
     <Layout
-      title={`Offline Pay with Crypto`}
+      title={`Offline Pay with Celo`}
       description="An open source project which helps you build, test, and manage your Crypto payment integration">
       <HomepageHeader />
       <main>

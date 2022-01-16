@@ -93,12 +93,12 @@ const ModalComponent = ({
 
   // URI for Valora/Metamask QRCode Connection
   // https://github.com/celo-org/use-contractkit/blob/1bc9de31c4bc071bbc2519569cecaa2ec2a69684/packages/use-contractkit/src/screens/valora.tsx#L18
-  const uri = useWalletConnectConnector(
-    () => {},
-    true,
-    getDeepLink,
-    selectedCrypto?.walletAddress
-  )
+  // const uri = useWalletConnectConnector(
+  //   () => {},
+  //   true,
+  //   getDeepLink,
+  //   selectedCrypto?.walletAddress
+  // )
 
   async function transfer() {
     const code = selectedCrypto?.code?.toUpperCase()
@@ -313,7 +313,8 @@ const ModalComponent = ({
               <div className="qr-container">
                 <div className="qr-div">
                   {selectedCrypto?.walletAddress && (
-                    <QRCode value={uri} size={150} className="qr-code" />
+                    ''
+                    // <QRCode value={uri} size={150} className="qr-code" />
                   )}
                 </div>
                 <div className="qr-text">
