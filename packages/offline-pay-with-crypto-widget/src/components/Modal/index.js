@@ -18,7 +18,10 @@ import { useContractKit } from '@celo-tools/use-contractkit'
 import ModalConfig from '../ModalConfig'
 import Alert from '../Alert'
 import LockIcon from '@mui/icons-material/Lock'
-// import { BigNumber } from 'bignumber.js'
+import Accordion from '@mui/material/Accordion'
+import AccordionSummary from '@mui/material/AccordionSummary'
+import AccordionDetails from '@mui/material/AccordionDetails'
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 
 const dropIn = {
   hidden: {
@@ -62,7 +65,8 @@ const ModalComponent = ({
   const [selectedCrypto, setSelectedCrypto] = useState(
     supportedCurrencies?.['CELO']
   )
-  const { performActions } = useContractKit()
+  const { performActions, destroy, connect, address, network } =
+    useContractKit()
 
   const invalid = () => {
     if (
@@ -100,18 +104,23 @@ const ModalComponent = ({
   //   selectedCrypto?.walletAddress
   // )
 
+  if (selectedCrypto.code === 'CUSD') selectedCrypto.code = 'cUSD'
+  const valoraLink = `celo://wallet/pay?address=${selectedCrypto?.walletAddress}&displayName=${name}&amount=${selectedCrypto?.amount}&comment=${paymentDescription}&token=${selectedCrypto.code}&currencyCode=USD`
+
   async function transfer() {
     const code = selectedCrypto?.code?.toUpperCase()
     try {
+      if (!address) await resetConnection()
+      setAlertDetails({})
       let amount = selectedCrypto?.amount
       const successConfirmation = {
         title: 'Payment sent',
-        message: `Payment sent to ${senderName}. Please check your wallet balance.`,
+        message: `Payment sent to ${name}. Please check your wallet balance.`,
       }
 
       const failureConfirmation = {
         title: 'Payment failed',
-        message: `Payment to ${senderName} failed. Please contact  ${senderName}.`,
+        message: `Payment to ${name} failed. Please contact  ${name}.`,
       }
       if (code === 'CUSD') {
         await performActions(async (kit) => {
@@ -159,6 +168,15 @@ const ModalComponent = ({
     } catch (error) {
       console.error(error)
       alert(error)
+    }
+  }
+
+  const resetConnection = async () => {
+    try {
+      await destroy()
+      await connect()
+    } catch (error) {
+      console.log(error)
     }
   }
 
@@ -313,8 +331,7 @@ const ModalComponent = ({
               <div className="qr-container">
                 <div className="qr-div">
                   {selectedCrypto?.walletAddress && (
-                    ''
-                    // <QRCode value={uri} size={150} className="qr-code" />
+                    <QRCode value={valoraLink} size={150} className="qr-code" />
                   )}
                 </div>
                 <div className="qr-text">
@@ -400,6 +417,41 @@ const ModalComponent = ({
           <br />
           <br />
           <br />
+
+          {address && (
+            <div
+              style={{
+                position: 'fixed',
+                right: '0px',
+                bottom: '40px',
+                textAlign: 'right',
+              }}
+            >
+              <Accordion elevation={0}>
+                <AccordionSummary
+                  expandIcon={<ExpandMoreIcon />}
+                  style={{ float: 'right' }}
+                >
+                  <Typography>{network.name}</Typography>
+                </AccordionSummary>
+                <AccordionDetails>
+                  <Typography variant="subtitle2">
+                    {network.name} {network.rpcUrl} ({network.chainId})
+                  </Typography>
+                  <Typography variant="caption">Address: {address}</Typography>
+                  <br />
+                  <Button
+                    onClick={resetConnection}
+                    variant="text"
+                    color="error"
+                    size="small"
+                  >
+                    Reset connecttion
+                  </Button>
+                </AccordionDetails>
+              </Accordion>
+            </div>
+          )}
           <hr className="hr" />
           <Grid
             container
