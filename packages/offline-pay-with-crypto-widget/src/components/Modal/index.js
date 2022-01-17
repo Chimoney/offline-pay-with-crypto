@@ -12,7 +12,6 @@ import QRCode from 'qrcode.react'
 import { motion } from 'framer-motion'
 import { icons as cryptoIcon } from '../icons'
 import { ContractKitProvider } from '@celo-tools/use-contractkit'
-import { useWalletConnectConnector } from '@celo-tools/use-contractkit/lib/connectors/useWalletConnectConnector'
 import '@celo-tools/use-contractkit/lib/styles.css'
 import { useContractKit } from '@celo-tools/use-contractkit'
 import ModalConfig from '../ModalConfig'
@@ -22,6 +21,7 @@ import Accordion from '@mui/material/Accordion'
 import AccordionSummary from '@mui/material/AccordionSummary'
 import AccordionDetails from '@mui/material/AccordionDetails'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
+import { useMediaQuery, useTheme } from '@mui/material'
 
 const dropIn = {
   hidden: {
@@ -57,6 +57,11 @@ const ModalComponent = ({
   const [notValid, setNotValid] = useState(false)
   const [alertDetails, setAlertDetails] = useState({ message: '' })
 
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'), {
+    noSsr: true,
+  })
+
   supportedCurrencies =
     Object.keys(supportedCurrencies).length < 1
       ? { CELO: { code: 'CELO', walletAddress: 'm', amount: 0 } }
@@ -86,25 +91,13 @@ const ModalComponent = ({
     }
   }
 
-  const getDeepLink = (uri) => {
-    return `celo://wallet/wc?uri=${uri}`
-  }
-
   useEffect(() => {
     setNotValid(invalid())
     setSelectedCrypto(supportedCurrencies?.['CELO'])
   }, [setNotValid, alertDetails.message])
 
-  // URI for Valora/Metamask QRCode Connection
-  // https://github.com/celo-org/use-contractkit/blob/1bc9de31c4bc071bbc2519569cecaa2ec2a69684/packages/use-contractkit/src/screens/valora.tsx#L18
-  // const uri = useWalletConnectConnector(
-  //   () => {},
-  //   true,
-  //   getDeepLink,
-  //   selectedCrypto?.walletAddress
-  // )
-
   if (selectedCrypto.code === 'CUSD') selectedCrypto.code = 'cUSD'
+
   const valoraLink = `celo://wallet/pay?address=${selectedCrypto?.walletAddress}&displayName=${name}&amount=${selectedCrypto?.amount}&comment=${paymentDescription}&token=${selectedCrypto.code}&currencyCode=USD`
 
   async function transfer() {
@@ -167,6 +160,15 @@ const ModalComponent = ({
       }
     } catch (error) {
       console.error(error)
+      alert(error)
+    }
+  }
+
+  async function payWithValora() {
+    try {
+      window.location.assign(valoraLink)
+    } catch (error) {
+      console.log(error)
       alert(error)
     }
   }
@@ -357,12 +359,24 @@ const ModalComponent = ({
                 </div>
               </div>
               <Grid xs={12} align="center" item>
-                {isCelo && (
+                {isCelo && isMobile ? (
+                  <div className="agent-btn">
+                    <Button
+                      onClick={payWithValora}
+                      variant="contained"
+                      color="primary"
+                      size="large"
+                    >
+                      Pay with Valora
+                    </Button>
+                  </div>
+                ) : (
                   <div className="agent-btn">
                     <Button
                       onClick={transfer}
                       variant="contained"
                       color="primary"
+                      size="large"
                     >
                       Pay with Web3 Wallet
                     </Button>
@@ -406,6 +420,7 @@ const ModalComponent = ({
                       onClick={() =>
                         alert("We're working on the Agent feature")
                       }
+                      size="large"
                     >
                       Send
                     </Button>
@@ -465,7 +480,7 @@ const ModalComponent = ({
               color="success"
             />
             <Typography variant="subtitle1" align="center">
-              Secured by Cryptography
+              Secured with Cryptography
             </Typography>
           </Grid>
         </Box>
