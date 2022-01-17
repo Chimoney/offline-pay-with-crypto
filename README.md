@@ -18,7 +18,7 @@
   <h3 align="center">offline-pay-with-crypto</h3>
 
   <p align="center">
-    Enable anyone to accept crypto via an embed on Web or Mobile
+    Enable anyone to accept CELO and other crypto via an embed on Mobile, Web and through a processing Agent
     <br />
     <a href="https://github.com/Chimoney/offline-pay-with-crypto"><strong>Explore the docs »</strong></a>
     <br />
@@ -65,9 +65,9 @@
 
 ### Built With
 
-This section should list any major frameworks/libraries used to bootstrap your project. Leave any add-ons/plugins for the acknowledgements section. Here are a few examples.
-
 - [React.js](https://reactjs.org/)
+- [Valora](https://valoraapp.com/)
+- [celo-org/use-contractkit](https://reactjs.org/)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -99,9 +99,9 @@ This section should list any major frameworks/libraries used to bootstrap your p
 
 ## Usage
 
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
+This project has four packages found in the /packages directory. Each package has a readme
 
-_For more examples, please refer to the [Documentation](https://example.com)_
+_For full details of how to use, please refer to the [Documentation](https://offline-pay-with-crypto-landing-page.onrender.com/docs/intro)_
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -110,10 +110,17 @@ _For more examples, please refer to the [Documentation](https://example.com)_
 ## Roadmap
 
 - [x] Setup
-- [x] Widget
-- [ ] Backend
-- [ ] Celo support
-- [ ] cUSD support
+- [x] Accept Celo
+- [x] Accept cUSD
+- [x] Enable payment by integrating a Payment widget
+- [x] Enable payment by integrating in a React Apps
+- [x] Enable payment from No-code Merchant app
+- [x] Pay with Valora on Web and Mobile
+- [x] Pay with Celo Web Wallet
+- [x] Pay with Metamask
+- [ ] Pay with Walletconnect
+- [ ] Backend service to watch for transactions
+- [ ] Pay through offline Agent by emailing payment request to Agent
 
 See the [open issues](https://github.com/Chimoney/offline-pay-with-crypto/issues) for a full list of proposed features (and known issues).
 
@@ -148,9 +155,9 @@ Distributed under the MIT License. See `LICENSE.md` for more information.
 
 ## Contact
 
-- Uchi Uchibeke - [@uchiuchibeke](https://twitter.com/uchiuchibeke) - uchi.uchibeke@gmail.com
-- Bayo
-- Lawal
+- Uchi Uchibeke - [@uchiuchibeke](https://twitter.com/uchiuchibeke)
+- Adebayo Ilerioluwa - [@adebayoileri](https://github.com/adebayoileri)
+- Lawal - [@Mlggg29](https://twitter.com/Mlggg29)
 
 Project Link: [https://github.com/Chimoney/offline-pay-with-crypto](https://github.com/Chimoney/offline-pay-with-crypto)
 
@@ -160,7 +167,7 @@ Project Link: [https://github.com/Chimoney/offline-pay-with-crypto](https://gith
 
 ## Acknowledgments
 
-- [GitHub Pages](https://pages.github.com)
+- [Celo](https://celo.org/) for funding this project
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
