@@ -1,6 +1,6 @@
 # `offline-pay-with-crypto-widget`
 
-> TODO: description
+> Accept Celo and other crypto Payments from React and other apps
 
 ## Usage
 
@@ -23,49 +23,53 @@ ReactDOM.render(
 2. To make use of the components
 
 ```jsx
-import { ModalOverlay, Modal, ModalContainer, useModal } from '@chimoney/offline-pay-with-crypto-widget';
+import {
+  ModalOverlay,
+  Modal,
+  ModalContainer,
+  useModal,
+} from '@chimoney/offline-pay-with-crypto-widget'
 
 export default function DemoModal() {
-    const { isOpen, toggleModal } = useModal();
+  const { isOpen, toggleModal } = useModal()
 
-    const config = {
+  const config = {
     name: 'Chimoney app',
     store_img:
       'https://lh3.googleusercontent.com/-crMj-_7sKco/AAAAAAAAAAI/AAAAAAAAAAA/8wRiFKrmpe8/s88-p-k-no-ns-nd/photo.jpg',
 
     paymentDescription: 'Send a payment to chimoney.io',
     supportedCurrencies: {
-      'CELO': {
+      CELO: {
         code: 'CELO',
         walletAddress: '0x3........', // change to celo wallet address here
         amount: 1,
       },
-      'CUSD': {
+      CUSD: {
         code: 'cUSD',
         walletAddress: '0x3........',
         amount: 1,
       },
     },
+    amountToCharge: 1,
   }
-    return (
-        <>
-            <button onClick={toggleModal}>Open Modal</button>
-            <ModalContainer>
-                {
-                    isOpen &&
-                    <ModalOverlay onClick={toggleModal}>
-                        <Modal {...config} />
-                    </ModalOverlay>
-                }
-            </ModalContainer>
-        </>
-    )
+  return (
+    <>
+      <button onClick={toggleModal}>Open Modal</button>
+      <ModalContainer>
+        {isOpen && (
+          <ModalOverlay onClick={toggleModal}>
+            <Modal {...config} />
+          </ModalOverlay>
+        )}
+      </ModalContainer>
+    </>
+  )
 }
-
 ```
 
-
 ## Local Development
+
 Link `peer-dependencies` packages
 
 ```
@@ -78,8 +82,6 @@ npm link ../offline-pay-with-crypto-landing-page/node_modules/react-dom
 
 
 ```
-
-
 
 <!-- CONTRIBUTING -->
 
@@ -131,4 +133,3 @@ Project Link: [https://github.com/Chimoney/offline-pay-with-crypto](https://gith
 
 <a href="https://github.com/Chimoney/offline-pay-with-crypto"><img alt="MIT" src="https://img.shields.io/badge/license-MIT-blue.svg" /></a>
 <a href="https://github.com/Chimoney/offline-pay-with-crypto"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg" alt="PRs welcome!" /></a>
-

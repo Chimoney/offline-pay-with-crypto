@@ -49,7 +49,7 @@ const ModalComponent = ({
   paymentDescription,
   store_img,
   supportedCurrencies,
-  amountToCharge = 0,
+  amountToCharge,
 }) => {
   const [state, setState] = useState('address')
   const [email, setEmail] = useState('')
@@ -201,7 +201,7 @@ const ModalComponent = ({
     >
       <Container id="modal-container" sx={{ bgcolor: 'white' }} maxWidth="md">
         <Typography color="red" align="center" variant="body2">
-          This is actively being developed. Do not send real transaction
+          This is actively being developed. Only send small amounts
         </Typography>
         <Box
           sx={{
@@ -307,7 +307,9 @@ const ModalComponent = ({
               color="text.primary"
             >
               {' '}
-              ${amountToCharge} USD
+              {amountToCharge
+                ? `${amountToCharge} USD`
+                : `${selectedCrypto?.amount} ${selectedCrypto?.code}`}
             </Typography>
           </Paper>
           <br />

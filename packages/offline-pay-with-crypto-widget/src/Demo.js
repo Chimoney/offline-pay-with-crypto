@@ -5,7 +5,6 @@ import { Button } from '@mui/material'
 export default function Demo() {
   const { isOpen, toggleModal } = useModal()
 
-
   const config = {
     name: 'Chimoney app',
     store_img:
@@ -13,17 +12,18 @@ export default function Demo() {
 
     paymentDescription: 'Send a payment to chimoney.io',
     supportedCurrencies: {
-      'CELO': {
+      CELO: {
         code: 'CELO',
         walletAddress: '0x363f932743599EBc88C85A35C201615dA4f2Bc5E',
         amount: 1,
       },
-      'CUSD': {
+      CUSD: {
         code: 'cUSD',
         walletAddress: '0x363f932743599EBc88C85A35C201615dA4f2Bc5E',
         amount: 1,
       },
     },
+    amountToCharge: 1,
   }
 
   return (
