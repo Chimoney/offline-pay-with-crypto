@@ -8,7 +8,7 @@ const FeatureList = [
     Svg: require('../../static/img/undraw_docusaurus_mountain.svg').default,
     description: (
       <>
-        Offline Pay with crypto was designed from the ground up to be easily
+        Offline Pay with Celo was designed from the ground up to be easily
         installed and used experience amazing crypto payment integration.
       </>
     ),
@@ -18,7 +18,7 @@ const FeatureList = [
     Svg: require('../../static/img/undraw_docusaurus_tree.svg').default,
     description: (
       <>
-        Offline Pay with crypto remove the burden of Payment Integration, as we
+        Offline Pay with Celo remove the burden of Payment Integration, as we
         the npm package or library does the work for you.
       </>
     ),
