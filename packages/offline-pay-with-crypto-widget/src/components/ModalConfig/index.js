@@ -30,7 +30,7 @@ const currencies = [
     code: 'CELO',
   },
   {
-    code: 'cUSD',
+    code: 'CUSD',
   },
   //TODO: add other supported currencies
 ]
@@ -99,7 +99,7 @@ function ModalConfig() {
   const getExchanges = async (code) => {
     try {
       setIsRateLoading(true)
-      const res = await coinApi.getExchange(code)
+      const res = await coinApi.getExchange(code?.toUpperCase())
       if (!res.error) {
         setIsRateLoading(false)
         return res
