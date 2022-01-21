@@ -45,7 +45,7 @@ export default function DemoModal() {
         walletAddress: '0x3........', // change to celo wallet address here
         amount: 1,
       },
-      CUSD: {
+      cUSD: {
         code: 'cUSD',
         walletAddress: '0x3........',
         amount: 1,

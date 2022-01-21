@@ -30,7 +30,7 @@ const currencies = [
     code: 'CELO',
   },
   {
-    code: 'CUSD',
+    code: 'cUSD',
   },
   //TODO: add other supported currencies
 ]
@@ -48,6 +48,7 @@ function ModalConfig() {
     amountToCharge: 0,
     paymentDescription: '',
     supportedCurrencies: [{ code: 'cUSD', walletAddress: '', amount: 0 }],
+    redirectURL: '',
   })
 
   const [selectedCoin, setSelectedCoin] = useState('CELO')
@@ -72,6 +73,7 @@ function ModalConfig() {
     const storeImg = url.searchParams.get('storeImg') || ''
     const paymentDescription = url.searchParams.get('paymentDescription') || ''
     const amountToCharge = url.searchParams.get('amountToCharge') || 0
+    const redirectURL = url.searchParams.get('redirectURL') || ''
     const supportedCurrenciesFromParams = JSON.parse(
       decodeURIComponent(url.searchParams.get('supportedCurrencies'))
     )
@@ -89,6 +91,7 @@ function ModalConfig() {
       storeImg,
       paymentDescription,
       supportedCurrencies: arrayFromSupportedCurrencies,
+      redirectURL,
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
@@ -142,6 +145,7 @@ function ModalConfig() {
               storeImg,
               paymentDescription,
               amountToCharge,
+              redirectURL,
               supportedCurrencies,
             } = values
 
@@ -157,6 +161,7 @@ function ModalConfig() {
             source.searchParams.set('name', name)
             source.searchParams.set('storeImg', storeImg)
             source.searchParams.set('amountToCharge', amountToCharge)
+            source.searchParams.set('redirectURL', redirectURL)
             source.searchParams.set('paymentDescription', paymentDescription)
             source.searchParams.set(
               'supportedCurrencies',
@@ -201,6 +206,26 @@ function ModalConfig() {
                 />
                 <TextField
                   margin="normal"
+                  placeholder="Amount to charge in USD"
+                  value={values?.amountToCharge}
+                  // onKeyDown={handleAmountInput}
+                  onChange={handleChange}
+                  error={Boolean(
+                    getIn(touched, 'amountToCharge') &&
+                      getIn(errors, 'amountToCharge')
+                  )}
+                  helperText={
+                    getIn(touched, 'amountToCharge') &&
+                    getIn(errors, 'amountToCharge')
+                  }
+                  name="amountToCharge"
+                  fullWidth
+                  label="Amount to Charge in USD"
+                  variant="outlined"
+                  type="number"
+                />
+                <TextField
+                  margin="normal"
                   value={values?.paymentDescription}
                   onChange={handleChange}
                   fullWidth
@@ -238,23 +263,22 @@ function ModalConfig() {
                 />
                 <TextField
                   margin="normal"
-                  placeholder="Amount to charge in USD"
-                  value={values?.amountToCharge}
-                  // onKeyDown={handleAmountInput}
+                  placeholder="https://"
+                  value={values?.redirectURL}
                   onChange={handleChange}
                   error={Boolean(
-                    getIn(touched, 'amountToCharge') &&
-                      getIn(errors, 'amountToCharge')
+                    getIn(touched, 'redirectURL') &&
+                      getIn(errors, 'redirectURL')
                   )}
                   helperText={
-                    getIn(touched, 'amountToCharge') &&
-                    getIn(errors, 'amountToCharge')
+                    getIn(touched, 'redirectURL') &&
+                    getIn(errors, 'redirectURL')
                   }
-                  name="amountToCharge"
+                  name="redirectURL"
                   fullWidth
-                  label="Amount to Charge in USD"
+                  label="Website to return to after payment"
                   variant="outlined"
-                  type="number"
+                  type="url"
                 />
                 <Box sx={{ my: 2 }}>
                   {' '}

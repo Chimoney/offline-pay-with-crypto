@@ -17,13 +17,14 @@ export default function Demo() {
         walletAddress: '0x363f932743599EBc88C85A35C201615dA4f2Bc5E',
         amount: 1,
       },
-      CUSD: {
+      cUSD: {
         code: 'cUSD',
         walletAddress: '0x363f932743599EBc88C85A35C201615dA4f2Bc5E',
         amount: 1,
       },
     },
     amountToCharge: 1,
+    redirectURL: '',
   }
 
   return (
