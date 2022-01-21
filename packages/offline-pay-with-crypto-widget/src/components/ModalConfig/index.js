@@ -18,7 +18,7 @@ import MuiAlert from '@mui/material/Alert'
 import CopyAllIcon from '@mui/icons-material/CopyAll'
 import InputAdornment from '@mui/material/InputAdornment'
 import { Formik, FieldArray, getIn } from 'formik'
-import { coinApi } from '../../services'
+import { ExchangeAPI } from '../../services'
 import AddCircleIcon from '@mui/icons-material/AddCircle'
 
 const Alert = React.forwardRef(function Alert(props, ref) {
@@ -96,7 +96,7 @@ function ModalConfig() {
   const getExchanges = async (code) => {
     try {
       setIsRateLoading(true)
-      const res = await coinApi.getExchange(code)
+      const res = await ExchangeAPI.getExchange(code)
       if (!res.error) {
         setIsRateLoading(false)
         return res
@@ -178,6 +178,7 @@ function ModalConfig() {
           touched,
           setTouched,
           values,
+          setFieldValue
         }) => (
           <form onSubmit={handleSubmit} id="modal-config">
             <Box sx={{ bgcolor: 'white', my: 4 }}>
@@ -241,7 +242,10 @@ function ModalConfig() {
                   placeholder="Amount to charge in USD"
                   value={values?.amountToCharge}
                   // onKeyDown={handleAmountInput}
-                  onChange={handleChange}
+                  onChange={(e) => {
+                    setFieldValue('supportedCurrencies', [])
+                    setFieldValue('amountToCharge', e.target.value)
+                  }}
                   error={Boolean(
                     getIn(touched, 'amountToCharge') &&
                       getIn(errors, 'amountToCharge')
