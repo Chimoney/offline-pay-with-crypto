@@ -1,8 +1,8 @@
 ---
 id: widget-setup
 title: Utility/Mobile Developer Setup
-
 ---
+
 import PageRef from '../src/components/PageRef'
 
 ## Offline-Pay-With-Celo Util
@@ -14,13 +14,15 @@ A simple utility script that handles embedding the `@chimoney/offline-pay-with-c
 Manually add the `@chimoney/offline-pay-with-crypto-util` script tag to your html file. This adds the script to the browser's window as an instance `OfflinePayWithCryptoUtil`
 
 ```html
-
 <!-- add in site's  <head> -->
-<script src="https://unpkg.com/@chimoney/offline-pay-with-crypto-util/umd/index.js" async></script>
-
+<script
+  src="https://unpkg.com/@chimoney/offline-pay-with-crypto-util/umd/index.js"
+  async
+></script>
 ```
 
 ## Usage
+
 Include the script in a `script` tag or an external `.js` file.
 
 ```js
@@ -52,7 +54,7 @@ Include the script in a `script` tag or an external `.js` file.
               walletAddress: "0x33....", // enter wallet addresss here
               amount: 1,
             },
-            CUSD: {
+            cUSD: {
               code: "cUSD",
               walletAddress: "0x45..",
               amount: 1,
@@ -70,25 +72,24 @@ Include the script in a `script` tag or an external `.js` file.
 
 ## JS Frameworks
 
-Click the links below for detailed examples on how to use  `@chimoney/offline-pay-with-crypto-util` with your favourite framework;
+Click the links below for detailed examples on how to use `@chimoney/offline-pay-with-crypto-util` with your favourite framework;
 
 ### React
+
 <PageRef url="/docs/react-widget" pageName="Setup With React" />
 
 ### Angular
--  *WIP* 🔜🔜🔜
+
+- _WIP_ 🔜🔜🔜
 
 ### Vue
--  *WIP* 🔜🔜🔜
 
+- _WIP_ 🔜🔜🔜
 
-
-
- ## Contribution
+## Contribution
 
 Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are greatly appreciated.
 If you have a suggestion that would make this better, please fork the repo and create a pull request. You can also simply open an issue with the tag "enhancement". Don't forget to give the project a star! Thanks again!
-
 
 ```shell
 •	Fork the Project

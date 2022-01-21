@@ -50,6 +50,7 @@ const ModalComponent = ({
   store_img,
   supportedCurrencies,
   amountToCharge,
+  redirectURL,
 }) => {
   const [state, setState] = useState('address')
   const [email, setEmail] = useState('')
@@ -64,12 +65,13 @@ const ModalComponent = ({
 
   supportedCurrencies =
     Object.keys(supportedCurrencies).length < 1
-      ? { CELO: { code: 'CELO', walletAddress: 'm', amount: 0 } }
+      ? { CELO: { code: 'CELO', walletAddress: '', amount: 0 } }
       : supportedCurrencies
 
   const [selectedCrypto, setSelectedCrypto] = useState(
-    supportedCurrencies?.['CELO']
+    supportedCurrencies?.['cUSD'] || supportedCurrencies?.['CELO']
   )
+
   const { performActions, destroy, connect, address, network } =
     useContractKit()
 
@@ -93,28 +95,49 @@ const ModalComponent = ({
 
   useEffect(() => {
     setNotValid(invalid())
-    setSelectedCrypto(supportedCurrencies?.['CELO'])
+    setSelectedCrypto(
+      supportedCurrencies?.['cUSD'] || supportedCurrencies?.['CELO']
+    )
   }, [setNotValid, alertDetails.message])
 
-  if (selectedCrypto.code === 'CUSD') selectedCrypto.code = 'cUSD'
+  const valoraLink = `celo://wallet/pay?address=${selectedCrypto?.walletAddress}&displayName=${name}&amount=${selectedCrypto?.amount}&comment=${paymentDescription}&token=${selectedCrypto?.code}&currencyCode=USD`
 
-  const valoraLink = `celo://wallet/pay?address=${selectedCrypto?.walletAddress}&displayName=${name}&amount=${selectedCrypto?.amount}&comment=${paymentDescription}&token=${selectedCrypto.code}&currencyCode=USD`
+  const finalizeCeloPayment = (transaction) => {
+    const successConfirmation = {
+      title: 'Payment sent',
+      message: `Payment sent to ${name}. Please check your wallet balance.`,
+    }
 
-  async function transfer() {
+    const failureConfirmation = {
+      title: 'Payment failed',
+      message: `Payment to ${name} failed. Please contact  ${name}.`,
+    }
+    const { status, transactionHash, blockNumber } = transaction
+    if (status && transactionHash.length && blockNumber > 1) {
+      if (redirectURL && redirectURL.startsWith('http')) {
+        const baseURL = new URL(redirectURL)
+        const previousParams = new URLSearchParams(baseURL.search || '')
+        const urlParams = new URLSearchParams({
+          ...previousParams.entries(),
+          txid: transactionHash,
+          transactionHash,
+        }).toString()
+        const url = `https://${baseURL.hostname}${baseURL.pathname}?${urlParams}`
+        window.location.assign(url)
+      } else {
+        setAlertDetails(successConfirmation)
+      }
+    } else {
+      setAlertDetails(failureConfirmation)
+    }
+  }
+
+  async function payWithCelo() {
     const code = selectedCrypto?.code?.toUpperCase()
     try {
       if (!address) await resetConnection()
       setAlertDetails({})
       let amount = selectedCrypto?.amount
-      const successConfirmation = {
-        title: 'Payment sent',
-        message: `Payment sent to ${name}. Please check your wallet balance.`,
-      }
-
-      const failureConfirmation = {
-        title: 'Payment failed',
-        message: `Payment to ${name} failed. Please contact  ${name}.`,
-      }
       if (code === 'CUSD') {
         await performActions(async (kit) => {
           const cUSD = await kit.contracts.getStableToken('cUSD')
@@ -127,12 +150,7 @@ const ModalComponent = ({
             )
             .sendAndWaitForReceipt()
             .then((transaction = {}) => {
-              const { status, transactionHash, blockNumber } = transaction
-              if (status && transactionHash.length && blockNumber > 1) {
-                setAlertDetails(successConfirmation)
-              } else {
-                setAlertDetails(failureConfirmation)
-              }
+              finalizeCeloPayment(transaction)
             })
         })
       } else if (code === 'CELO') {
@@ -146,13 +164,8 @@ const ModalComponent = ({
               paymentDescription
             )
             .sendAndWaitForReceipt()
-            .then((transaction) => {
-              const { status, transactionHash, blockNumber } = transaction
-              if (status && transactionHash.length && blockNumber > 1) {
-                setAlertDetails(successConfirmation)
-              } else {
-                setAlertDetails(failureConfirmation)
-              }
+            .then((transaction = {}) => {
+              finalizeCeloPayment(transaction)
             })
         })
       } else {
@@ -184,8 +197,8 @@ const ModalComponent = ({
 
   const isCelo =
     selectedCrypto?.walletAddress &&
-    (selectedCrypto.code?.toUpperCase() === 'CELO' ||
-      selectedCrypto.code?.toUpperCase() === 'CUSD')
+    (selectedCrypto?.code?.toUpperCase() === 'CELO' ||
+      selectedCrypto?.code?.toUpperCase() === 'cUSD')
 
   if (notValid) {
     return <ModalConfig />
@@ -375,7 +388,7 @@ const ModalComponent = ({
                 ) : (
                   <div className="agent-btn">
                     <Button
-                      onClick={transfer}
+                      onClick={payWithCelo}
                       variant="contained"
                       color="primary"
                       size="large"
