@@ -45,7 +45,7 @@ Manually add the `@chimoney/offline-pay-with-crypto-util` script tag to the <hea
               walletAddress: "0x33....", // enter wallet addresss here
               amount: 1,
             },
-            CUSD: {
+            cUSD: {
               code: "cUSD",
               walletAddress: "0x45..",
               amount: 1,

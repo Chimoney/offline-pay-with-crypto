@@ -11,6 +11,7 @@ function App() {
     'supportedCurrencies'
   )
   const amountToCharge = url.searchParams.get('amountToCharge')
+  const redirectURL = url.searchParams.get('redirectURL')
   const supportedCurrencies =
     JSON.parse(decodeURIComponent(supportedCurrenciesFromParams)) || {}
 
@@ -20,6 +21,7 @@ function App() {
     paymentDescription,
     supportedCurrencies,
     amountToCharge,
+    redirectURL,
   }
   return <Modal {...config} />
 }
