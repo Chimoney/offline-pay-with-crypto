@@ -1,31 +1,23 @@
-import axios from 'axios'
-const apiKey = process.env.REACT_APP_COIN_API_KEY
+import axios from 'axios';
 
 const axiosApiInstance = axios.create({
   headers: {
     Accept: 'application/json',
     'Content-Type': 'application/json',
     'Access-Control-Allow-Origin': '*',
-    'X-CoinAPI-Key': apiKey,
   },
 })
 
-axiosApiInstance.defaults.baseURL = 'https://rest.coinapi.io'
+axiosApiInstance.defaults.baseURL = process.env.REACT_APP_API_URL;
 
-export const coinApi = {
+export const ExchangeAPI = {
   getExchange: async (code) => {
     try {
-      let data = {}
       const response = await axiosApiInstance.get(
-        `/v1/exchangerate/${code}/USD`
+        `/rate?code=${code}`
       )
 
-      data[code] = {
-        rate: response?.data?.rate,
-        error: false,
-      }
-
-      return data
+      return response?.data?.data
     } catch (err) {
       return {
         rate: null,

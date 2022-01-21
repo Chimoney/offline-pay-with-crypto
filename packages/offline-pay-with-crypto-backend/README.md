@@ -1,11 +1,32 @@
-# `offline-pay-with-crypto-backend`
+## `offline-pay-with-celo-backend`
 
-> TODO: description
+This project handles currency exchange on the `offline-pay-with-celo-widget` application.
 
-## Usage
+## Getting Started
+
+### Run
+
 
 ```
-const offlinePayWithCryptoBackend = require('offline-pay-with-crypto-backend');
-
-// TODO: DEMONSTRATE API
+yarn
 ```
+
+### Rename
+```
+.env.example to .env
+
+```
+
+#### Update config to the .env file
+
+### Available Scripts
+
+```
+npm run dev
+```
+Runs the app in the development mode.
+
+```
+npm build
+```
+Builds minified version for production mode
