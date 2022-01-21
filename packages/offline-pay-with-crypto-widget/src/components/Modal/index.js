@@ -100,8 +100,6 @@ const ModalComponent = ({
     )
   }, [setNotValid, alertDetails.message])
 
-  if (selectedCrypto?.code === 'cUSD') selectedCrypto.code = 'cUSD'
-
   const valoraLink = `celo://wallet/pay?address=${selectedCrypto?.walletAddress}&displayName=${name}&amount=${selectedCrypto?.amount}&comment=${paymentDescription}&token=${selectedCrypto?.code}&currencyCode=USD`
 
   const finalizeCeloPayment = (transaction) => {
@@ -118,8 +116,9 @@ const ModalComponent = ({
     if (status && transactionHash.length && blockNumber > 1) {
       if (redirectURL && redirectURL.startsWith('http')) {
         const baseURL = new URL(redirectURL)
+        const previousParams = new URLSearchParams(baseURL.search || '')
         const urlParams = new URLSearchParams({
-          ...(baseURL.search || {}),
+          ...previousParams.entries(),
           txid: transactionHash,
           transactionHash,
         }).toString()
@@ -139,7 +138,7 @@ const ModalComponent = ({
       if (!address) await resetConnection()
       setAlertDetails({})
       let amount = selectedCrypto?.amount
-      if (code === 'cUSD') {
+      if (code === 'CUSD') {
         await performActions(async (kit) => {
           const cUSD = await kit.contracts.getStableToken('cUSD')
           amount = kit.web3.utils.toWei(String(amount), 'ether')
